@@ -1,0 +1,43 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Kirish" %}{% endblock %}
+
+{% block guest_content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <h3 class="text-center mb-4">💰 {% trans "Kirish" %}</h3>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Foydalanuvchi nomi" %}</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Parol" %}</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    
+                    <div class="mb-3 text-end">
+                        <a href="{% url 'finance:forgot_password' %}" class="text-muted small">
+                            {% trans "Parolni unutdingizmi?" %}
+                        </a>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">{% trans "Kirish" %}</button>
+                </form>
+                
+                <hr>
+                <p class="text-center mb-0">
+                    {% trans "Hisobingiz yo'qmi?" %} <a href="{% url 'finance:register' %}">{% trans "Ro'yxatdan o'ting" %}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,1 +1,0 @@
-# Oxirgi-imtihon

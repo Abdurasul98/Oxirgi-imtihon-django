@@ -1,0 +1,213 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Bosh sahifa" %}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">📊 {% trans "Bosh sahifa" %}</h2>
+
+<!-- Statistika kartochkalari -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card border-success">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Jami kirim" %}</h6>
+                <h3 class="text-success">{{ total_income|floatformat:2 }} {{ currency_symbol }}</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card border-danger">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Jami chiqim" %}</h6>
+                <h3 class="text-danger">{{ total_expense|floatformat:2 }} {{ currency_symbol }}</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card border-primary">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Balans" %}</h6>
+                <h3 class="text-primary">{{ total_balance|floatformat:2 }} {{ currency_symbol }}</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card border-info">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Bugungi kirim" %}</h6>
+                <h3 class="text-info">{{ today_income|floatformat:2 }} {{ currency_symbol }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Progress bar -->
+{% if total_income > 0 or total_expense > 0 %}
+<div class="card mb-4">
+    <div class="card-body">
+        <h6 class="mb-3">{% trans "Kirim va Chiqim nisbati" %}</h6>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="text-success">{% trans "Kirim" %}</span>
+                    <span class="text-success fw-bold">{{ total_income|floatformat:2 }} {{ currency_symbol }}</span>
+                </div>
+                <div class="progress" style="height: 25px;">
+                    {% widthratio total_income total_income|add:total_expense 100 as income_percent %}
+                    <div class="progress-bar bg-success" style="width: {{ income_percent }}%">
+                        {{ income_percent }}%
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="text-danger">{% trans "Chiqim" %}</span>
+                    <span class="text-danger fw-bold">{{ total_expense|floatformat:2 }} {{ currency_symbol }}</span>
+                </div>
+                <div class="progress" style="height: 25px;">
+                    {% widthratio total_expense total_income|add:total_expense 100 as expense_percent %}
+                    <div class="progress-bar bg-danger" style="width: {{ expense_percent }}%">
+                        {{ expense_percent }}%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Hisoblar VA VALYUTA TUGMALARI -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="bi bi-wallet2"></i> {% trans "Hisoblar" %}</h5>
+        <div>
+            <!-- VALYUTA TUGMALARI -->
+            <div class="btn-group me-3" role="group">
+                <a href="?currency=UZS" class="btn btn-sm {% if selected_currency == 'UZS' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                    UZS
+                </a>
+                <a href="?currency=USD" class="btn btn-sm {% if selected_currency == 'USD' %}btn-success{% else %}btn-outline-success{% endif %}">
+                    USD
+                </a>
+                <a href="?currency=EUR" class="btn btn-sm {% if selected_currency == 'EUR' %}btn-info{% else %}btn-outline-info{% endif %}">
+                    EUR
+                </a>
+                <a href="?currency=RUB" class="btn btn-sm {% if selected_currency == 'RUB' %}btn-warning{% else %}btn-outline-warning{% endif %}">
+                    RUB
+                </a>
+            </div>
+            <a href="{% url 'finance:account_add' %}" class="btn btn-sm btn-primary">+ {% trans "Hisob qo'shish" %}</a>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if accounts %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans "Nomi" %}</th>
+                        <th>{% trans "Turi" %}</th>
+                        <th>{% trans "Original" %}</th>
+                        <th>{{ selected_currency }} {% trans "da" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for account in accounts %}
+                    <tr>
+                        <td><strong>{{ account.name }}</strong></td>
+                        <td>
+                            <span class="badge bg-secondary">{{ account.get_account_type_display }}</span>
+                        </td>
+                        <td class="text-muted">
+                            {{ account.original_balance|floatformat:2 }} {{ account.original_symbol }}
+                        </td>
+                        <td class="fw-bold text-primary">
+                            {{ account.converted_balance|floatformat:2 }} {{ currency_symbol }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="table-active">
+                        <td colspan="3"><strong>{% trans "JAMI BALANS:" %}</strong></td>
+                        <td class="fw-bold text-primary fs-5">
+                            {{ total_balance|floatformat:2 }} {{ currency_symbol }}
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center">{% trans "Hisob mavjud emas. Birinchi hisob qo'shing!" %}</p>
+        <div class="text-center">
+            <a href="{% url 'finance:account_add' %}" class="btn btn-primary">{% trans "Hisob qo'shish" %}</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Oxirgi tranzaksiyalar -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0"><i class="bi bi-arrow-down-circle"></i> {% trans "Oxirgi kirimlar" %}</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_incomes %}
+                <ul class="list-group list-group-flush">
+                    {% for income in recent_incomes %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <strong>{{ income.category }}</strong><br>
+                            <small class="text-muted">{{ income.date }} - {{ income.account.name }}</small>
+                        </div>
+                        <span class="text-success fw-bold">
+                            +{{ income.amount|floatformat:2 }} {{ income.currency_symbol }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'finance:income_list' %}" class="btn btn-sm btn-outline-success w-100 mt-2">{% trans "Barchasini ko'rish" %}</a>
+                {% else %}
+                <p class="text-muted text-center">{% trans "Kirim mavjud emas" %}</p>
+                <a href="{% url 'finance:income_add' %}" class="btn btn-success w-100">{% trans "Kirim qo'shish" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h6 class="mb-0"><i class="bi bi-arrow-up-circle"></i> {% trans "Oxirgi chiqimlar" %}</h6>
+            </div>
+            <div class="card-body">
+                {% if recent_expenses %}
+                <ul class="list-group list-group-flush">
+                    {% for expense in recent_expenses %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <strong>{{ expense.category }}</strong><br>
+                            <small class="text-muted">{{ expense.date }} - {{ expense.account.name }}</small>
+                        </div>
+                        <span class="text-danger fw-bold">
+                            -{{ expense.amount|floatformat:2 }} {{ expense.currency_symbol }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <a href="{% url 'finance:expense_list' %}" class="btn btn-sm btn-outline-danger w-100 mt-2">{% trans "Barchasini ko'rish" %}</a>
+                {% else %}
+                <p class="text-muted text-center">{% trans "Chiqim mavjud emas" %}</p>
+                <a href="{% url 'finance:expense_add' %}" class="btn btn-danger w-100">{% trans "Chiqim qo'shish" %}</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

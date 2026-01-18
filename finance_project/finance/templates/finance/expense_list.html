@@ -1,0 +1,66 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Chiqimlar" %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-arrow-up-circle text-danger"></i> {% trans "Chiqimlar" %}</h2>
+    <a href="{% url 'finance:expense_add' %}" class="btn btn-danger">
+        <i class="bi bi-plus-circle"></i> {% trans "Chiqim qo'shish" %}
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">{% trans "Jami chiqim" %}: <span class="text-danger">{{ total|floatformat:0 }} {% trans "so'm" %}</span></h5>
+    </div>
+    <div class="card-body">
+        {% if expenses %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans "Sana" %}</th>
+                        <th>{% trans "Kategoriya" %}</th>
+                        <th>{% trans "Hisob" %}</th>
+                        <th>{% trans "Summa" %}</th>
+                        <th>{% trans "Izoh" %}</th>
+                        <th>{% trans "Amallar" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in expenses %}
+                    <tr>
+                        <td>{{ expense.date }}</td>
+                        <td><span class="badge bg-warning">{{ expense.category }}</span></td>
+                        <td>
+                            {{ expense.account.name }}
+                            <br><small class="text-muted">{{ expense.account.get_account_type_display }}</small>
+                        </td>
+                        <td class="text-danger fw-bold">
+                            -{{ expense.amount|floatformat:2 }} {{ expense.currency_symbol }}
+                        </td>
+                        <td>{{ expense.description|truncatewords:5 }}</td>
+                        <td>
+                            <a href="{% url 'finance:expense_edit' expense.pk %}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'finance:expense_delete' expense.pk %}" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted">{% trans "Hech qanday chiqim mavjud emas." %}</p>
+        <div class="text-center">
+            <a href="{% url 'finance:expense_add' %}" class="btn btn-danger">{% trans "Birinchi chiqimni qo'shing" %}</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

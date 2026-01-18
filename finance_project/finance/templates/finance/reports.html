@@ -1,0 +1,293 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Hisobotlar" %}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-bar-chart text-primary"></i> {% trans "Hisobotlar" %}</h2>
+
+<!-- Filter -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">{% trans "Davr" %}</label>
+                <select name="period" class="form-select" onchange="toggleCustomDates(this.value)">
+                    <option value="day" {% if period == 'day' %}selected{% endif %}>{% trans "Bugun" %}</option>
+                    <option value="week" {% if period == 'week' %}selected{% endif %}>{% trans "Bu hafta" %}</option>
+                    <option value="month" {% if period == 'month' %}selected{% endif %}>{% trans "Bu oy" %}</option>
+                    <option value="custom" {% if period == 'custom' %}selected{% endif %}>{% trans "Boshqa davr" %}</option>
+                </select>
+            </div>
+            
+            <div class="col-md-3" id="start-date-field" style="display: {% if period == 'custom' %}block{% else %}none{% endif %};">
+                <label class="form-label">{% trans "Boshlanish" %}</label>
+                <input type="date" name="start_date" class="form-control" value="{{ date_from|date:'Y-m-d' }}">
+            </div>
+            
+            <div class="col-md-3" id="end-date-field" style="display: {% if period == 'custom' %}block{% else %}none{% endif %};">
+                <label class="form-label">{% trans "Tugash" %}</label>
+                <input type="date" name="end_date" class="form-control" value="{{ date_to|date:'Y-m-d' }}">
+            </div>
+            
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> {% trans "Ko'rish" %}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Umumiy statistika -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h5 class="mb-3">{{ period_name }} {% trans "statistikasi" %}</h5>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card stat-card border-success">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Jami kirim" %}</h6>
+                <h3 class="text-success">{{ total_income|floatformat:0 }} {% trans "so'm" %}</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card stat-card border-danger">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Jami chiqim" %}</h6>
+                <h3 class="text-danger">{{ total_expense|floatformat:0 }} {% trans "so'm" %}</h3>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card stat-card {% if balance >= 0 %}border-primary{% else %}border-warning{% endif %}">
+            <div class="card-body">
+                <h6 class="text-muted">{% trans "Farq (kirim - chiqim)" %}</h6>
+                <h3 class="{% if balance >= 0 %}text-primary{% else %}text-warning{% endif %}">
+                    {{ balance|floatformat:0 }} {% trans "so'm" %}
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Kategoriya bo'yicha -->
+<div class="row mb-4">
+    <!-- Chiqimlar -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h6 class="mb-0"><i class="bi bi-pie-chart"></i> {% trans "Kategoriya bo'yicha chiqimlar" %}</h6>
+            </div>
+            <div class="card-body">
+                {% if expense_by_category %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Kategoriya" %}</th>
+                                <th class="text-end">{% trans "Summa" %}</th>
+                                <th class="text-end">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in expense_by_category %}
+                            <tr>
+                                <td>{{ item.category__name }}</td>
+                                <td class="text-end fw-bold">{{ item.total|floatformat:0 }} {% trans "so'm" %}</td>
+                                <td class="text-end">
+                                    {% widthratio item.total total_expense 100 %}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">{% trans "Ma'lumot yo'q" %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Kirimlar -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0"><i class="bi bi-pie-chart"></i> {% trans "Kategoriya bo'yicha kirimlar" %}</h6>
+            </div>
+            <div class="card-body">
+                {% if income_by_category %}
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Kategoriya" %}</th>
+                                <th class="text-end">{% trans "Summa" %}</th>
+                                <th class="text-end">%</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in income_by_category %}
+                            <tr>
+                                <td>{{ item.category__name }}</td>
+                                <td class="text-end fw-bold">{{ item.total|floatformat:0 }} {% trans "so'm" %}</td>
+                                <td class="text-end">
+                                    {% widthratio item.total total_income 100 %}%
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">{% trans "Ma'lumot yo'q" %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Hisob bo'yicha statistika -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h6 class="mb-0"><i class="bi bi-wallet2"></i> {% trans "Hisob bo'yicha statistika" %}</h6>
+    </div>
+    <div class="card-body">
+        {% if account_stats %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans "Hisob" %}</th>
+                        <th class="text-end">{% trans "Kirim" %}</th>
+                        <th class="text-end">{% trans "Chiqim" %}</th>
+                        <th class="text-end">{% trans "Joriy balans" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in account_stats %}
+                    <tr>
+                        <td>
+                            <strong>{{ stat.account.name }}</strong>
+                            <br><small class="text-muted">{{ stat.account.get_account_type_display }}</small>
+                        </td>
+                        <td class="text-end text-success">+{{ stat.income|floatformat:0 }} {% trans "so'm" %}</td>
+                        <td class="text-end text-danger">-{{ stat.expense|floatformat:0 }} {% trans "so'm" %}</td>
+                        <td class="text-end fw-bold">{{ stat.account.balance|floatformat:0 }} {% trans "so'm" %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center">{% trans "Ma'lumot yo'q" %}</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Oxirgi 7 kunlik grafik -->
+<div class="card mb-4">
+    <div class="card-header">
+        <h6 class="mb-0"><i class="bi bi-graph-up"></i> {% trans "Oxirgi 7 kunlik trend" %}</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>{% trans "Sana" %}</th>
+                        <th class="text-end">{% trans "Kirim" %}</th>
+                        <th class="text-end">{% trans "Chiqim" %}</th>
+                        <th class="text-end">{% trans "Farq" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day in daily_stats %}
+                    <tr>
+                        <td>{{ day.date|date:"d.m.Y (D)" }}</td>
+                        <td class="text-end text-success">{{ day.income|floatformat:0 }}</td>
+                        <td class="text-end text-danger">{{ day.expense|floatformat:0 }}</td>
+                        <td class="text-end fw-bold {% if day.income >= day.expense %}text-success{% else %}text-danger{% endif %}">
+                            {{ day.income|add:"-"|add:day.expense|floatformat:0 }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Oxirgi tranzaksiyalar -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h6 class="mb-0">{% trans "Oxirgi kirimlar" %}</h6>
+            </div>
+            <div class="card-body">
+                {% if incomes %}
+                <ul class="list-group list-group-flush">
+                    {% for income in incomes %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <strong>{{ income.category }}</strong><br>
+                            <small class="text-muted">{{ income.date }} - {{ income.account.name }}</small>
+                        </div>
+                        <span class="text-success fw-bold">+{{ income.amount|floatformat:0 }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted text-center">{% trans "Ma'lumot yo'q" %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h6 class="mb-0">{% trans "Oxirgi chiqimlar" %}</h6>
+            </div>
+            <div class="card-body">
+                {% if expenses %}
+                <ul class="list-group list-group-flush">
+                    {% for expense in expenses %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <div>
+                            <strong>{{ expense.category }}</strong><br>
+                            <small class="text-muted">{{ expense.date }} - {{ expense.account.name }}</small>
+                        </div>
+                        <span class="text-danger fw-bold">-{{ expense.amount|floatformat:0 }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-muted text-center">{% trans "Ma'lumot yo'q" %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function toggleCustomDates(period) {
+    const startField = document.getElementById('start-date-field');
+    const endField = document.getElementById('end-date-field');
+    
+    if (period === 'custom') {
+        startField.style.display = 'block';
+        endField.style.display = 'block';
+    } else {
+        startField.style.display = 'none';
+        endField.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

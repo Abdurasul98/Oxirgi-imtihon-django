@@ -1,0 +1,66 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Email tasdiqlash" %}{% endblock %}
+
+{% block guest_content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <i class="bi bi-envelope-check text-primary" style="font-size: 3rem;"></i>
+                    <h3 class="mt-3">{% trans "Email tasdiqlash" %}</h3>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="bi bi-info-circle"></i>
+                    <strong>{{ user.email }}</strong> {% trans "manziliga 6 raqamli tasdiqlash kodi yuborildi." %}
+                    <br><small class="text-muted">{% trans "Kod 10 daqiqa davomida amal qiladi." %}</small>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-4">
+                        <label class="form-label">{% trans "Tasdiqlash kodini kiriting" %}</label>
+                        <input 
+                            type="text" 
+                            name="code" 
+                            class="form-control form-control-lg text-center" 
+                            placeholder="123456"
+                            maxlength="6"
+                            pattern="[0-9]{6}"
+                            required
+                            style="letter-spacing: 10px; font-size: 24px; font-weight: bold;"
+                        >
+                        <small class="text-muted">{% trans "Emailingizdan 6 raqamli kodni kiriting" %}</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">
+                        <i class="bi bi-check-circle"></i> {% trans "Tasdiqlash" %}
+                    </button>
+                </form>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <p class="text-muted mb-2">{% trans "Kod kelmadimi?" %}</p>
+                    <a href="{% url 'finance:resend_code' user.id %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-clockwise"></i> {% trans "Yangi kod yuborish" %}
+                    </a>
+                </div>
+                
+                <hr>
+                
+                <div class="text-center">
+                    <small class="text-muted">
+                        {% trans "Emailni o'zgartirish kerakmi?" %}
+                        <a href="{% url 'finance:register' %}">{% trans "Qayta ro'yxatdan o'ting" %}</a>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

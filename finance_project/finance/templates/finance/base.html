@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+{% load i18n %}
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Kirim-Chiqim Tizimi{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background-color: #212529;
+        }
+        .sidebar a {
+            color: #adb5bd;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: block;
+            transition: all 0.3s;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            background-color: #495057;
+            color: #fff;
+        }
+        .main-content {
+            padding: 20px;
+        }
+        .stat-card {
+            border-left: 4px solid;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .lang-flag {
+            cursor: pointer;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+        .lang-flag:hover, .lang-flag.active {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    
+    {% if user.is_authenticated and user.is_active %}
+    <!-- LOGGED IN AND ACTIVE USER VIEW -->
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 sidebar p-0">
+                <div class="p-3 text-center border-bottom">
+                    <h5 class="text-white mb-0">💰 Finance</h5>
+                </div>
+                
+                <nav class="mt-3">
+                    <a href="{% url 'finance:dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="bi bi-house-door"></i> {% trans "Bosh sahifa" %}
+                    </a>
+                    <a href="{% url 'finance:income_list' %}" class="{% if 'income' in request.path %}active{% endif %}">
+                        <i class="bi bi-arrow-down-circle"></i> {% trans "Kirimlar" %}
+                    </a>
+                    <a href="{% url 'finance:expense_list' %}" class="{% if 'expense' in request.path %}active{% endif %}">
+                        <i class="bi bi-arrow-up-circle"></i> {% trans "Chiqimlar" %}
+                    </a>
+                    <a href="{% url 'finance:account_list' %}" class="{% if 'account' in request.path %}active{% endif %}">
+                        <i class="bi bi-wallet2"></i> {% trans "Hisoblar" %}
+                    </a>
+                    <a href="{% url 'finance:category_list' %}" class="{% if 'categor' in request.path %}active{% endif %}">
+                        <i class="bi bi-tags"></i> {% trans "Kategoriyalar" %}
+                    </a>
+                    <a href="{% url 'finance:reports' %}" class="{% if 'reports' in request.path %}active{% endif %}">
+                        <i class="bi bi-bar-chart"></i> {% trans "Hisobotlar" %}
+                    </a>
+                    
+                    <hr class="text-white">
+                    
+                    <!-- TIL TUGMALARI - YANGI -->
+                    <div class="px-3 py-2">
+                        <small class="text-muted d-block mb-2"><i class="bi bi-translate"></i> {% trans "Til" %}</small>
+                        <form action="{% url 'set_language' %}" method="post" id="language-form">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.path }}">
+                            <div class="d-flex gap-2 justify-content-center">
+                                <button type="submit" name="language" value="uz" class="btn btn-sm btn-outline-light lang-flag {% if LANGUAGE_CODE == 'uz' %}active{% endif %}" title="O'zbek">
+                                    🇺🇿
+                                </button>
+                                <button type="submit" name="language" value="en" class="btn btn-sm btn-outline-light lang-flag {% if LANGUAGE_CODE == 'en' %}active{% endif %}" title="English">
+                                    🇬🇧
+                                </button>
+                                <button type="submit" name="language" value="ru" class="btn btn-sm btn-outline-light lang-flag {% if LANGUAGE_CODE == 'ru' %}active{% endif %}" title="Русский">
+                                    🇷🇺
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <hr class="text-white">
+                    
+                    <a href="{% url 'finance:logout' %}">
+                        <i class="bi bi-box-arrow-right"></i> {% trans "Chiqish" %}
+                    </a>
+                </nav>
+                
+                <div class="p-3 text-center position-absolute bottom-0 w-100">
+                    <small class="text-muted">👤 {{ user.username }}</small>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 main-content">
+                <!-- Messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <!-- Page Content -->
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+    
+    {% else %}
+    <!-- GUEST VIEW (NOT LOGGED IN OR NOT ACTIVE) -->
+    <div class="container mt-5">
+        <!-- TIL TUGMALARI (GUEST UCHUN) -->
+        <div class="text-end mb-3">
+            <form action="{% url 'set_language' %}" method="post" class="d-inline">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}">
+                <button type="submit" name="language" value="uz" class="btn btn-sm btn-outline-primary {% if LANGUAGE_CODE == 'uz' %}active{% endif %}">
+                    🇺🇿 O'zbek
+                </button>
+                <button type="submit" name="language" value="en" class="btn btn-sm btn-outline-primary {% if LANGUAGE_CODE == 'en' %}active{% endif %}">
+                    🇬🇧 English
+                </button>
+                <button type="submit" name="language" value="ru" class="btn btn-sm btn-outline-primary {% if LANGUAGE_CODE == 'ru' %}active{% endif %}">
+                    🇷🇺 Русский
+                </button>
+            </form>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        
+        {% block guest_content %}{% endblock %}
+    </div>
+    {% endif %}
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

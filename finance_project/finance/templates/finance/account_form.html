@@ -1,0 +1,67 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Hisob qo'shish" %}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0"><i class="bi bi-wallet2"></i> {% trans "Yangi hisob qo'shish" %}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Hisob nomi" %}</label>
+                        {{ form.name }}
+                        <small class="text-muted">{% trans "Masalan: Asosiy karta, Naqd pul, Dollar hisobi" %}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Hisob turi" %}</label>
+                        {{ form.account_type }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Valyuta" %}</label>
+                        {{ form.currency }}
+                        <small class="text-muted">{% trans "Bu hisob qaysi valyutada?" %}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Boshlang'ich balans" %}</label>
+                        {{ form.balance }}
+                        <small class="text-muted">{% trans "Hisob yaratilganda mavjud pul miqdori (tanlangan valyutada)" %}</small>
+                    </div>
+                    
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> 
+                        <strong>{% trans "Eslatma:" %}</strong> {% trans "Keyinchalik kirim va chiqim qo'shganingizda balans avtomatik yangilanadi." %}
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-fill">
+                            <i class="bi bi-check-circle"></i> {% trans "Saqlash" %}
+                        </button>
+                        <a href="{% url 'finance:account_list' %}" class="btn btn-secondary flex-fill">
+                            <i class="bi bi-x-circle"></i> {% trans "Bekor qilish" %}
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    select, input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}

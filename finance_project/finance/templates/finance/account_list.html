@@ -1,0 +1,85 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Hisoblar" %}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-wallet2 text-primary"></i> {% trans "Hisoblar" %}</h2>
+    <a href="{% url 'finance:account_add' %}" class="btn btn-primary">
+        <i class="bi bi-plus-circle"></i> {% trans "Hisob qo'shish" %}
+    </a>
+</div>
+
+<div class="row">
+    {% if accounts %}
+        {% for account in accounts %}
+        <div class="col-md-4 mb-3">
+            <div class="card h-100 stat-card border-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="mb-0">{{ account.name }}</h5>
+                        <span class="badge bg-secondary">{{ account.get_account_type_display }}</span>
+                    </div>
+                    
+                    <h3 class="text-primary mb-2">
+                        {{ account.balance|floatformat:2 }} {{ account.currency_symbol }}
+                    </h3>
+                    
+                    <small class="text-muted">
+                        <i class="bi bi-calendar"></i> 
+                        {{ account.created_at|date:"d.m.Y" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="bi bi-wallet2 text-muted" style="font-size: 3rem;"></i>
+                <p class="text-muted mt-3">{% trans "Hech qanday hisob mavjud emas." %}</p>
+                <a href="{% url 'finance:account_add' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> {% trans "Birinchi hisobni qo'shing" %}
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5 class="mb-0">{% trans "Barcha hisoblar jadvali" %}</h5>
+    </div>
+    <div class="card-body">
+        {% if accounts %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>{% trans "Hisob nomi" %}</th>
+                        <th>{% trans "Turi" %}</th>
+                        <th>{% trans "Balans" %}</th>
+                        <th>{% trans "Yaratilgan" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for account in accounts %}
+                    <tr>
+                        <td><strong>{{ account.name }}</strong></td>
+                        <td><span class="badge bg-secondary">{{ account.get_account_type_display }}</span></td>
+                        <td class="fw-bold text-primary">
+                            {{ account.balance|floatformat:2 }} {{ account.currency_symbol }}
+                        </td>
+                        <td>{{ account.created_at|date:"d.m.Y H:i" }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
