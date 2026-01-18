@@ -39,7 +39,7 @@ class IncomeForm(forms.ModelForm):
         self.fields['account'].queryset = Account.objects.filter(user=user)
         self.fields['category'].queryset = IncomeCategory.objects.filter(user=user)
 
-# Expense Form
+# Expense Form (TO'LIQ VERSIYA - edit uchun ham)
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
@@ -51,9 +51,52 @@ class ExpenseForm(forms.ModelForm):
     
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Faqat user'ning o'z hisoblari va kategoriyalarini ko'rsatish
         self.fields['account'].queryset = Account.objects.filter(user=user)
         self.fields['category'].queryset = ExpenseCategory.objects.filter(user=user)
+        self.user = user
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        account = cleaned_data.get('account')
+        amount = cleaned_data.get('amount')
+        
+        if account and amount:
+            # Agar edit qilinyotgan bo'lsa (instance mavjud)
+            if self.instance and self.instance.pk:
+                # Eski summa qaytariladi, yangi summa olinadi
+                old_amount = self.instance.amount
+                old_account = self.instance.account
+                
+                # Agar hisob o'zgarmagan bo'lsa
+                if old_account == account:
+                    # Farqni hisoblaymiz
+                    difference = amount - old_amount
+                    available_balance = account.balance
+                    
+                    if difference > available_balance:
+                        raise forms.ValidationError(
+                            f"Balansda yetarli mablag' yo'q! "
+                            f"Hisob: {account.name} - Mavjud: {available_balance} {account.currency}, "
+                            f"Qo'shimcha kerak: {difference} {account.currency}"
+                        )
+                else:
+                    # Agar hisob o'zgargan bo'lsa
+                    if account.balance < amount:
+                        raise forms.ValidationError(
+                            f"Yangi hisobda yetarli mablag' yo'q! "
+                            f"Hisob: {account.name} - Mavjud: {account.balance} {account.currency}, "
+                            f"Kerak: {amount} {account.currency}"
+                        )
+            else:
+                # Yangi chiqim qo'shilmoqda
+                if account.balance < amount:
+                    raise forms.ValidationError(
+                        f"Balansda yetarli mablag' yo'q! "
+                        f"Hisob: {account.name} - Mavjud: {account.balance} {account.currency}, "
+                        f"Kerak: {amount} {account.currency}"
+                    )
+        
+        return cleaned_data
 
 # Account Form
 class AccountForm(forms.ModelForm):

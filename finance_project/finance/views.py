@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 import uuid
 from decimal import Decimal
 from .currency_utils import get_exchange_rates, convert_amount, get_currency_symbol
-
+from django.core.exceptions import ValidationError
 
 
 # ========== AUTHENTICATION VIEWS (YANGILANGAN) ==========
@@ -362,11 +362,19 @@ def expense_add_view(request):
     if request.method == 'POST':
         form = ExpenseForm(request.user, request.POST)
         if form.is_valid():
-            expense = form.save(commit=False)
-            expense.user = request.user
-            expense.save()
-            messages.success(request, 'Chiqim muvaffaqiyatli qo\'shildi!')
-            return redirect('finance:expense_list')
+            try:
+                expense = form.save(commit=False)
+                expense.user = request.user
+                expense.save()
+                messages.success(request, 'Chiqim muvaffaqiyatli qo\'shildi!')
+                return redirect('finance:expense_list')
+            except ValidationError as e:
+                messages.error(request, str(e))
+        else:
+            # Form validation xatoliklari
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = ExpenseForm(request.user)
     return render(request, 'finance/expense_form.html', {'form': form, 'title': 'Chiqim qo\'shish'})
@@ -378,9 +386,17 @@ def expense_edit_view(request, pk):
     if request.method == 'POST':
         form = ExpenseForm(request.user, request.POST, instance=expense)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Chiqim tahrirlandi!')
-            return redirect('finance:expense_list')
+            try:
+                form.save()
+                messages.success(request, 'Chiqim tahrirlandi!')
+                return redirect('finance:expense_list')
+            except ValidationError as e:
+                messages.error(request, str(e))
+        else:
+            # Form validation xatoliklari
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, error)
     else:
         form = ExpenseForm(request.user, instance=expense)
     return render(request, 'finance/expense_form.html', {'form': form, 'title': 'Chiqimni tahrirlash'})
