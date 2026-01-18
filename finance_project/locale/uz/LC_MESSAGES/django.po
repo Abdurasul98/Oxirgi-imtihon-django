@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-18 16:10+0500\n"
+"POT-Creation-Date: 2026-01-18 21:18+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -173,6 +173,7 @@ msgid "Yangi kategoriya nomi"
 msgstr "Yangi kategoriya nomi"
 
 #: .\finance\templates\finance\category_list.html:23
+#: .\finance\templates\finance\category_list.html:60
 msgid "Qo'shish"
 msgstr "Qo'shish"
 
@@ -253,6 +254,28 @@ msgstr "Yo'q, bekor qilish"
 #: .\finance\templates\finance\reports.html:51
 msgid "Jami kirim"
 msgstr "Jami kirim"
+
+#: .\finance\templates\finance\dashboard.html:15
+#: .\finance\templates\finance\dashboard.html:24
+#: .\finance\templates\finance\dashboard.html:33
+#: .\finance\templates\finance\dashboard.html:42
+#: .\finance\templates\finance\dashboard.html:57
+#: .\finance\templates\finance\dashboard.html:69
+#: .\finance\templates\finance\dashboard.html:138
+#: .\finance\templates\finance\expense_form.html:28
+#: .\finance\templates\finance\expense_list.html:16
+#: .\finance\templates\finance\income_form.html:28
+#: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\reports.html:52
+#: .\finance\templates\finance\reports.html:61
+#: .\finance\templates\finance\reports.html:71
+#: .\finance\templates\finance\reports.html:101
+#: .\finance\templates\finance\reports.html:138
+#: .\finance\templates\finance\reports.html:179
+#: .\finance\templates\finance\reports.html:180
+#: .\finance\templates\finance\reports.html:181
+msgid "so'm"
+msgstr "so'm"
 
 #: .\finance\templates\finance\dashboard.html:23
 #: .\finance\templates\finance\expense_list.html:16
@@ -358,21 +381,6 @@ msgstr "Kategoriya"
 #: .\finance\templates\finance\reports.html:130
 msgid "Summa"
 msgstr "Summa"
-
-#: .\finance\templates\finance\expense_form.html:28
-#: .\finance\templates\finance\expense_list.html:16
-#: .\finance\templates\finance\income_form.html:28
-#: .\finance\templates\finance\income_list.html:16
-#: .\finance\templates\finance\reports.html:52
-#: .\finance\templates\finance\reports.html:61
-#: .\finance\templates\finance\reports.html:71
-#: .\finance\templates\finance\reports.html:101
-#: .\finance\templates\finance\reports.html:138
-#: .\finance\templates\finance\reports.html:179
-#: .\finance\templates\finance\reports.html:180
-#: .\finance\templates\finance\reports.html:181
-msgid "so'm"
-msgstr ""so'm""
 
 #: .\finance\templates\finance\expense_form.html:33
 #: .\finance\templates\finance\expense_list.html:24

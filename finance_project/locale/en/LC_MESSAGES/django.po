@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-18 16:10+0500\n"
+"POT-Creation-Date: 2026-01-18 21:05+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,15 +68,20 @@ msgstr "Initial balance"
 
 #: .\finance\templates\finance\account_form.html:37
 msgid "Hisob yaratilganda mavjud pul miqdori (tanlangan valyutada)"
-msgstr "The amount of money available when the account is created (in the selected currency)"
+msgstr ""
+"The amount of money available when the account is created (in the selected "
+"currency)"
 
 #: .\finance\templates\finance\account_form.html:42
 msgid "Eslatma:"
 msgstr "Note:"
 
 #: .\finance\templates\finance\account_form.html:42
-msgid "Keyinchalik kirim va chiqim qo'shganingizda balans avtomatik yangilanadi."
-msgstr "The balance will be updated automatically when you add income and expenses later."
+msgid ""
+"Keyinchalik kirim va chiqim qo'shganingizda balans avtomatik yangilanadi."
+msgstr ""
+"The balance will be updated automatically when you add income and expenses "
+"later."
 
 #: .\finance\templates\finance\account_form.html:47
 #: .\finance\templates\finance\expense_form.html:44
@@ -196,7 +201,8 @@ msgid ""
 "Kategoriyalarni oldindan qo'shing, keyin kirim va chiqim qo'shayotganda "
 "tanlashingiz osonroq bo'ladi."
 msgstr ""
-"Add categories in advance so it will be easier to select them when adding income and expenses."
+"Add categories in advance so it will be easier to select them when adding "
+"income and expenses."
 
 #: .\finance\templates\finance\category_list.html:90
 msgid "Misol kirim kategoriyalari:"
@@ -251,6 +257,28 @@ msgstr "No, cancel"
 #: .\finance\templates\finance\reports.html:51
 msgid "Jami kirim"
 msgstr "Total Income"
+
+#: .\finance\templates\finance\dashboard.html:15
+#: .\finance\templates\finance\dashboard.html:24
+#: .\finance\templates\finance\dashboard.html:33
+#: .\finance\templates\finance\dashboard.html:42
+#: .\finance\templates\finance\dashboard.html:57
+#: .\finance\templates\finance\dashboard.html:69
+#: .\finance\templates\finance\dashboard.html:138
+#: .\finance\templates\finance\expense_form.html:28
+#: .\finance\templates\finance\expense_list.html:16
+#: .\finance\templates\finance\income_form.html:28
+#: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\reports.html:52
+#: .\finance\templates\finance\reports.html:61
+#: .\finance\templates\finance\reports.html:71
+#: .\finance\templates\finance\reports.html:101
+#: .\finance\templates\finance\reports.html:138
+#: .\finance\templates\finance\reports.html:179
+#: .\finance\templates\finance\reports.html:180
+#: .\finance\templates\finance\reports.html:181
+msgid "so'm"
+msgstr "UZS"
 
 #: .\finance\templates\finance\dashboard.html:23
 #: .\finance\templates\finance\expense_list.html:16
@@ -357,21 +385,6 @@ msgstr "Category"
 msgid "Summa"
 msgstr "Amount"
 
-#: .\finance\templates\finance\expense_form.html:28
-#: .\finance\templates\finance\expense_list.html:16
-#: .\finance\templates\finance\income_form.html:28
-#: .\finance\templates\finance\income_list.html:16
-#: .\finance\templates\finance\reports.html:52
-#: .\finance\templates\finance\reports.html:61
-#: .\finance\templates\finance\reports.html:71
-#: .\finance\templates\finance\reports.html:101
-#: .\finance\templates\finance\reports.html:138
-#: .\finance\templates\finance\reports.html:179
-#: .\finance\templates\finance\reports.html:180
-#: .\finance\templates\finance\reports.html:181
-msgid "so'm"
-msgstr "UZS"
-
 #: .\finance\templates\finance\expense_form.html:33
 #: .\finance\templates\finance\expense_list.html:24
 #: .\finance\templates\finance\income_form.html:33
@@ -447,7 +460,6 @@ msgid "Kirish"
 msgstr "Login"
 
 #: .\finance\templates\finance\income_list.html:59
-#| msgid "Kirim mavjud emas"
 msgid "Hech qanday kirim mavjud emas."
 msgstr "No incomes"
 

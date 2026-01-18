@@ -12,7 +12,7 @@
         <div class="card stat-card border-success">
             <div class="card-body">
                 <h6 class="text-muted">{% trans "Jami kirim" %}</h6>
-                <h3 class="text-success">{{ total_income|floatformat:2 }} {{ currency_symbol }}</h3>
+                <h3 class="text-success">{{ total_income|floatformat:2 }} {% trans "so'm" %}</h3>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
         <div class="card stat-card border-danger">
             <div class="card-body">
                 <h6 class="text-muted">{% trans "Jami chiqim" %}</h6>
-                <h3 class="text-danger">{{ total_expense|floatformat:2 }} {{ currency_symbol }}</h3>
+                <h3 class="text-danger">{{ total_expense|floatformat:2 }} {% trans "so'm" %}</h3>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
         <div class="card stat-card border-primary">
             <div class="card-body">
                 <h6 class="text-muted">{% trans "Balans" %}</h6>
-                <h3 class="text-primary">{{ total_balance|floatformat:2 }} {{ currency_symbol }}</h3>
+                <h3 class="text-primary">{{ total_balance|floatformat:2 }} {% trans "so'm" %}</h3>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
         <div class="card stat-card border-info">
             <div class="card-body">
                 <h6 class="text-muted">{% trans "Bugungi kirim" %}</h6>
-                <h3 class="text-info">{{ today_income|floatformat:2 }} {{ currency_symbol }}</h3>
+                <h3 class="text-info">{{ today_income|floatformat:2 }} {% trans "so'm" %}</h3>
             </div>
         </div>
     </div>
@@ -54,7 +54,7 @@
             <div class="col-md-6">
                 <div class="d-flex justify-content-between mb-1">
                     <span class="text-success">{% trans "Kirim" %}</span>
-                    <span class="text-success fw-bold">{{ total_income|floatformat:2 }} {{ currency_symbol }}</span>
+                    <span class="text-success fw-bold">{{ total_income|floatformat:2 }} {% trans "so'm" %}</span>
                 </div>
                 <div class="progress" style="height: 25px;">
                     {% widthratio total_income total_income|add:total_expense 100 as income_percent %}
@@ -66,7 +66,7 @@
             <div class="col-md-6">
                 <div class="d-flex justify-content-between mb-1">
                     <span class="text-danger">{% trans "Chiqim" %}</span>
-                    <span class="text-danger fw-bold">{{ total_expense|floatformat:2 }} {{ currency_symbol }}</span>
+                    <span class="text-danger fw-bold">{{ total_expense|floatformat:2 }} {% trans "so'm" %}</span>
                 </div>
                 <div class="progress" style="height: 25px;">
                     {% widthratio total_expense total_income|add:total_expense 100 as expense_percent %}
@@ -135,7 +135,7 @@
                     <tr class="table-active">
                         <td colspan="3"><strong>{% trans "JAMI BALANS:" %}</strong></td>
                         <td class="fw-bold text-primary fs-5">
-                            {{ total_balance|floatformat:2 }} {{ currency_symbol }}
+                            {{ total_balance|floatformat:2 }} {% trans "so'm" %}
                         </td>
                     </tr>
                 </tfoot>

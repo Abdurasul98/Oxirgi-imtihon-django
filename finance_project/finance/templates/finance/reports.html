@@ -210,10 +210,10 @@
                     {% for day in daily_stats %}
                     <tr>
                         <td>{{ day.date|date:"d.m.Y (D)" }}</td>
-                        <td class="text-end text-success">{{ day.income|floatformat:0 }}</td>
-                        <td class="text-end text-danger">{{ day.expense|floatformat:0 }}</td>
+                        <td class="text-end text-success">{{ day.income|floatformat:0 }} {% trans "so'm" %}</td>
+                        <td class="text-end text-danger">{{ day.expense|floatformat:0 }} {% trans "so'm" %}</td>
                         <td class="text-end fw-bold {% if day.income >= day.expense %}text-success{% else %}text-danger{% endif %}">
-                            {{ day.income|add:"-"|add:day.expense|floatformat:0 }}
+                            {{ day.difference|floatformat:0 }} {% trans "so'm" %}
                         </td>
                     </tr>
                     {% endfor %}
@@ -239,7 +239,7 @@
                             <strong>{{ income.category }}</strong><br>
                             <small class="text-muted">{{ income.date }} - {{ income.account.name }}</small>
                         </div>
-                        <span class="text-success fw-bold">+{{ income.amount|floatformat:0 }}</span>
+                        <span class="text-success fw-bold">+{{ income.amount|floatformat:2 }} {{ income.currency_symbol }}</span>
                     </li>
                     {% endfor %}
                 </ul>
@@ -264,7 +264,7 @@
                             <strong>{{ expense.category }}</strong><br>
                             <small class="text-muted">{{ expense.date }} - {{ expense.account.name }}</small>
                         </div>
-                        <span class="text-danger fw-bold">-{{ expense.amount|floatformat:0 }}</span>
+                        <span class="text-danger fw-bold">-{{ expense.amount|floatformat:2 }} {{ expense.currency_symbol }}</span>
                     </li>
                     {% endfor %}
                 </ul>

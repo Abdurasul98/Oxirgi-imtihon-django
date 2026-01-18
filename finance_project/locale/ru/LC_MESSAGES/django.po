@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-18 16:10+0500\n"
+"POT-Creation-Date: 2026-01-18 21:05+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -200,7 +200,8 @@ msgid ""
 "Kategoriyalarni oldindan qo'shing, keyin kirim va chiqim qo'shayotganda "
 "tanlashingiz osonroq bo'ladi."
 msgstr ""
-"Добавьте категории заранее, чтобы было проще выбирать их при добавлении доходов и расходов."
+"Добавьте категории заранее, чтобы было проще выбирать их при добавлении "
+"доходов и расходов."
 
 #: .\finance\templates\finance\category_list.html:90
 msgid "Misol kirim kategoriyalari:"
@@ -255,6 +256,28 @@ msgstr "Нет, отменить"
 #: .\finance\templates\finance\reports.html:51
 msgid "Jami kirim"
 msgstr "Всего доходов"
+
+#: .\finance\templates\finance\dashboard.html:15
+#: .\finance\templates\finance\dashboard.html:24
+#: .\finance\templates\finance\dashboard.html:33
+#: .\finance\templates\finance\dashboard.html:42
+#: .\finance\templates\finance\dashboard.html:57
+#: .\finance\templates\finance\dashboard.html:69
+#: .\finance\templates\finance\dashboard.html:138
+#: .\finance\templates\finance\expense_form.html:28
+#: .\finance\templates\finance\expense_list.html:16
+#: .\finance\templates\finance\income_form.html:28
+#: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\reports.html:52
+#: .\finance\templates\finance\reports.html:61
+#: .\finance\templates\finance\reports.html:71
+#: .\finance\templates\finance\reports.html:101
+#: .\finance\templates\finance\reports.html:138
+#: .\finance\templates\finance\reports.html:179
+#: .\finance\templates\finance\reports.html:180
+#: .\finance\templates\finance\reports.html:181
+msgid "so'm"
+msgstr "сум"
 
 #: .\finance\templates\finance\dashboard.html:23
 #: .\finance\templates\finance\expense_list.html:16
@@ -360,21 +383,6 @@ msgstr "Категория"
 #: .\finance\templates\finance\reports.html:130
 msgid "Summa"
 msgstr "Сумма"
-
-#: .\finance\templates\finance\expense_form.html:28
-#: .\finance\templates\finance\expense_list.html:16
-#: .\finance\templates\finance\income_form.html:28
-#: .\finance\templates\finance\income_list.html:16
-#: .\finance\templates\finance\reports.html:52
-#: .\finance\templates\finance\reports.html:61
-#: .\finance\templates\finance\reports.html:71
-#: .\finance\templates\finance\reports.html:101
-#: .\finance\templates\finance\reports.html:138
-#: .\finance\templates\finance\reports.html:179
-#: .\finance\templates\finance\reports.html:180
-#: .\finance\templates\finance\reports.html:181
-msgid "so'm"
-msgstr "сум"
 
 #: .\finance\templates\finance\expense_form.html:33
 #: .\finance\templates\finance\expense_list.html:24

@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum
-from datetime import date, timedelta
+from datetime import date, timedelta,datetime
 from .models import Income, Expense, Account, IncomeCategory, ExpenseCategory,EmailVerification, PasswordResetToken
 from .forms import (
     UserRegisterForm, IncomeForm, ExpenseForm, AccountForm,
@@ -15,6 +15,8 @@ import uuid
 from decimal import Decimal
 from .currency_utils import get_exchange_rates, convert_amount, get_currency_symbol
 from django.core.exceptions import ValidationError
+from django.db.models import Q
+from django.db.models.functions import TruncDate
 
 
 # ========== AUTHENTICATION VIEWS (YANGILANGAN) ==========
@@ -240,22 +242,59 @@ def dashboard_view(request):
         # Jami balansga qo'shish
         total_balance_in_selected += account.converted_balance
     
-    # Bugungi kirim va chiqim (selected valyutada)
+    # YANGI: Bugungi kirim va chiqim (HAR BIR TRANZAKSIYANI KONVERT QILISH)
     today = date.today()
-    today_income_uzs = Income.objects.filter(user=user, date=today).aggregate(total=Sum('amount'))['total'] or 0
-    today_expense_uzs = Expense.objects.filter(user=user, date=today).aggregate(total=Sum('amount'))['total'] or 0
     
-    today_income = convert_amount(today_income_uzs, 'UZS', selected_currency, rates)
-    today_expense = convert_amount(today_expense_uzs, 'UZS', selected_currency, rates)
+    # Bugungi kirimlar
+    today_incomes = Income.objects.filter(user=user, date=today)
+    today_income = Decimal('0.00')
+    for income in today_incomes:
+        # Har bir kirimni selected valyutaga konvert qilish
+        converted = convert_amount(
+            income.amount,
+            income.account.currency,  # Kirim qaysi valyutada
+            selected_currency,
+            rates
+        )
+        today_income += converted
     
-    # Jami kirim va chiqim (selected valyutada)
-    total_income_uzs = Income.objects.filter(user=user).aggregate(total=Sum('amount'))['total'] or 0
-    total_expense_uzs = Expense.objects.filter(user=user).aggregate(total=Sum('amount'))['total'] or 0
+    # Bugungi chiqimlar
+    today_expenses = Expense.objects.filter(user=user, date=today)
+    today_expense = Decimal('0.00')
+    for expense in today_expenses:
+        # Har bir chiqimni selected valyutaga konvert qilish
+        converted = convert_amount(
+            expense.amount,
+            expense.account.currency,  # Chiqim qaysi valyutada
+            selected_currency,
+            rates
+        )
+        today_expense += converted
     
-    total_income = convert_amount(total_income_uzs, 'UZS', selected_currency, rates)
-    total_expense = convert_amount(total_expense_uzs, 'UZS', selected_currency, rates)
+    # YANGI: Jami kirim va chiqim (BARCHA TRANZAKSIYALARNI KONVERT QILISH)
+    all_incomes = Income.objects.filter(user=user)
+    total_income = Decimal('0.00')
+    for income in all_incomes:
+        converted = convert_amount(
+            income.amount,
+            income.account.currency,
+            selected_currency,
+            rates
+        )
+        total_income += converted
     
-    # Oxirgi 5 ta tranzaksiya (YANGILANDI)
+    all_expenses = Expense.objects.filter(user=user)
+    total_expense = Decimal('0.00')
+    for expense in all_expenses:
+        converted = convert_amount(
+            expense.amount,
+            expense.account.currency,
+            selected_currency,
+            rates
+        )
+        total_expense += converted
+    
+    # Oxirgi 5 ta tranzaksiya
     recent_incomes = Income.objects.filter(user=user)[:5]
     recent_expenses = Expense.objects.filter(user=user)[:5]
     
@@ -478,18 +517,17 @@ def category_list_view(request):
 
 # ========== HISOBOTLAR (REPORTS) ==========
 
-from datetime import datetime, timedelta
-from django.db.models import Q
-from django.db.models.functions import TruncDate
-
 @login_required
 def reports_view(request):
     user = request.user
     
     # Filter parametrlari
-    period = request.GET.get('period', 'month')  # day, week, month, custom
+    period = request.GET.get('period', 'month')
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
+    
+    # Valyuta kurslari
+    rates = get_exchange_rates()
     
     # Sana oralig'ini aniqlash
     today = date.today()
@@ -499,11 +537,11 @@ def reports_view(request):
         date_to = today
         period_name = 'Bugungi'
     elif period == 'week':
-        date_from = today - timedelta(days=today.weekday())  # Hafta boshi (dushanba)
+        date_from = today - timedelta(days=today.weekday())
         date_to = today
         period_name = 'Bu hafta'
     elif period == 'month':
-        date_from = today.replace(day=1)  # Oy boshi
+        date_from = today.replace(day=1)
         date_to = today
         period_name = 'Bu oy'
     elif period == 'custom' and start_date and end_date:
@@ -519,44 +557,123 @@ def reports_view(request):
     incomes = Income.objects.filter(user=user, date__range=[date_from, date_to])
     expenses = Expense.objects.filter(user=user, date__range=[date_from, date_to])
     
-    # Jami summa
-    total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
-    total_expense = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    # Jami summa (har birini UZS ga konvert qilib)
+    total_income = Decimal('0.00')
+    for income in incomes:
+        converted = convert_amount(
+            income.amount,
+            income.account.currency,
+            'UZS',
+            rates
+        )
+        total_income += converted
+    
+    total_expense = Decimal('0.00')
+    for expense in expenses:
+        converted = convert_amount(
+            expense.amount,
+            expense.account.currency,
+            'UZS',
+            rates
+        )
+        total_expense += converted
+    
     balance = total_income - total_expense
     
-    # Kategoriya bo'yicha statistika (Chiqimlar uchun)
-    expense_by_category = expenses.values('category__name').annotate(
-        total=Sum('amount')
-    ).order_by('-total')
+    # Kategoriya bo'yicha statistika (Chiqimlar) - KONVERT BILAN
+    expense_categories = {}
+    for expense in expenses:
+        category_name = expense.category.name if expense.category else "Boshqa"
+        converted = convert_amount(
+            expense.amount,
+            expense.account.currency,
+            'UZS',
+            rates
+        )
+        if category_name in expense_categories:
+            expense_categories[category_name] += converted
+        else:
+            expense_categories[category_name] = converted
     
-    # Kategoriya bo'yicha statistika (Kirimlar uchun)
-    income_by_category = incomes.values('category__name').annotate(
-        total=Sum('amount')
-    ).order_by('-total')
+    expense_by_category = [
+        {'category__name': k, 'total': v} 
+        for k, v in sorted(expense_categories.items(), key=lambda x: x[1], reverse=True)
+    ]
     
-    # Hisob bo'yicha statistika
+    # Kategoriya bo'yicha statistika (Kirimlar) - KONVERT BILAN
+    income_categories = {}
+    for income in incomes:
+        category_name = income.category.name if income.category else "Boshqa"
+        converted = convert_amount(
+            income.amount,
+            income.account.currency,
+            'UZS',
+            rates
+        )
+        if category_name in income_categories:
+            income_categories[category_name] += converted
+        else:
+            income_categories[category_name] = converted
+    
+    income_by_category = [
+        {'category__name': k, 'total': v} 
+        for k, v in sorted(income_categories.items(), key=lambda x: x[1], reverse=True)
+    ]
+    
+    # Hisob bo'yicha statistika - KONVERT BILAN
     account_stats = []
     accounts = Account.objects.filter(user=user)
     for account in accounts:
-        acc_income = incomes.filter(account=account).aggregate(total=Sum('amount'))['total'] or 0
-        acc_expense = expenses.filter(account=account).aggregate(total=Sum('amount'))['total'] or 0
+        acc_incomes = incomes.filter(account=account)
+        acc_income = Decimal('0.00')
+        for inc in acc_incomes:
+            converted = convert_amount(inc.amount, inc.account.currency, 'UZS', rates)
+            acc_income += converted
+        
+        acc_expenses = expenses.filter(account=account)
+        acc_expense = Decimal('0.00')
+        for exp in acc_expenses:
+            converted = convert_amount(exp.amount, exp.account.currency, 'UZS', rates)
+            acc_expense += converted
+        
         account_stats.append({
             'account': account,
             'income': acc_income,
             'expense': acc_expense,
         })
     
-    # Kunlik statistika (oxirgi 7 kun uchun)
+    # Kunlik statistika (oxirgi 7 kun) - KONVERT BILAN
     daily_stats = []
     for i in range(6, -1, -1):
         day = today - timedelta(days=i)
-        day_income = Income.objects.filter(user=user, date=day).aggregate(total=Sum('amount'))['total'] or 0
-        day_expense = Expense.objects.filter(user=user, date=day).aggregate(total=Sum('amount'))['total'] or 0
+        
+        day_incomes = Income.objects.filter(user=user, date=day)
+        day_income = Decimal('0.00')
+        for inc in day_incomes:
+            converted = convert_amount(inc.amount, inc.account.currency, 'UZS', rates)
+            day_income += converted
+        
+        day_expenses = Expense.objects.filter(user=user, date=day)
+        day_expense = Decimal('0.00')
+        for exp in day_expenses:
+            converted = convert_amount(exp.amount, exp.account.currency, 'UZS', rates)
+            day_expense += converted
+        
+        difference = day_income - day_expense
+        
         daily_stats.append({
             'date': day,
             'income': day_income,
             'expense': day_expense,
+            'difference': difference, 
         })
+    
+    # YANGI: Oxirgi tranzaksiyalar uchun valyuta belgisini qo'shish
+    for income in incomes[:10]:
+        income.currency_symbol = get_currency_symbol(income.account.currency)
+    
+    for expense in expenses[:10]:
+        expense.currency_symbol = get_currency_symbol(expense.account.currency)
     
     context = {
         'period': period,
@@ -566,8 +683,8 @@ def reports_view(request):
         'total_income': total_income,
         'total_expense': total_expense,
         'balance': balance,
-        'incomes': incomes[:10],  # Oxirgi 10 ta
-        'expenses': expenses[:10],  # Oxirgi 10 ta
+        'incomes': incomes[:10],
+        'expenses': expenses[:10],
         'expense_by_category': expense_by_category,
         'income_by_category': income_by_category,
         'account_stats': account_stats,
