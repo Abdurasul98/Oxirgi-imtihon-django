@@ -72,7 +72,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'finance_db',
         'USER': 'n69',
-        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'PASSWORD': 'n69',
         'HOST': 'localhost',
         'PORT': '5432', 
     }
