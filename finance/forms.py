@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm,PasswordChangeForm
 from .models import Income, Expense, Account, IncomeCategory, ExpenseCategory
 
-# User Registration Form
 class UserRegisterForm(UserCreationForm):
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-control'}))
     
@@ -23,7 +22,6 @@ class UserRegisterForm(UserCreationForm):
             raise forms.ValidationError('Bu email allaqachon ro\'yxatdan o\'tgan!')
         return email
 
-# Income Form
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
@@ -35,11 +33,10 @@ class IncomeForm(forms.ModelForm):
     
     def __init__(self, user, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Faqat user'ning o'z hisoblari va kategoriyalarini ko'rsatish
+        
         self.fields['account'].queryset = Account.objects.filter(user=user)
         self.fields['category'].queryset = IncomeCategory.objects.filter(user=user)
 
-# Expense Form (TO'LIQ VERSIYA - edit uchun ham)
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
@@ -110,13 +107,13 @@ class AccountForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # Agar "Valyuta" tipini tanlasa, currency field ko'rinadi
 
-# Income Category Form
+
 class IncomeCategoryForm(forms.ModelForm):
     class Meta:
         model = IncomeCategory
         fields = ['name']
 
-# Expense Category Form
+
 class ExpenseCategoryForm(forms.ModelForm):
     class Meta:
         model = ExpenseCategory
@@ -124,7 +121,7 @@ class ExpenseCategoryForm(forms.ModelForm):
 
 
 
-# User Profile Form
+
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = User

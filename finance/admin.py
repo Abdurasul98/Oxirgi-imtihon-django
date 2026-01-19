@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.db.models import Sum
 from .models import Account, IncomeCategory, ExpenseCategory, Income, Expense,EmailVerification, PasswordResetToken,CurrencyRate
 
-# Account Admin
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display = ['name', 'account_type', 'balance', 'user', 'created_at']
@@ -16,7 +15,6 @@ class AccountAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-# Income Category Admin
 @admin.register(IncomeCategory)
 class IncomeCategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'user', 'total_income', 'created_at']
@@ -34,7 +32,6 @@ class IncomeCategoryAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-# Expense Category Admin
 @admin.register(ExpenseCategory)
 class ExpenseCategoryAdmin(admin.ModelAdmin):
     list_display = ['name', 'user', 'total_expense', 'created_at']
@@ -52,7 +49,6 @@ class ExpenseCategoryAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-# Income Admin
 @admin.register(Income)
 class IncomeAdmin(admin.ModelAdmin):
     list_display = ['date', 'category', 'amount', 'account', 'user', 'created_at']
@@ -67,7 +63,6 @@ class IncomeAdmin(admin.ModelAdmin):
             return qs
         return qs.filter(user=request.user)
 
-# Expense Admin
 @admin.register(Expense)
 class ExpenseAdmin(admin.ModelAdmin):
     list_display = ['date', 'category', 'amount', 'account', 'user', 'created_at']
@@ -103,5 +98,4 @@ class CurrencyRateAdmin(admin.ModelAdmin):
     list_editable = ['rate_to_uzs']
     
     def has_delete_permission(self, request, obj=None):
-        # Kurslarni o'chirib bo'lmaydi, faqat tahrirlash mumkin
         return False

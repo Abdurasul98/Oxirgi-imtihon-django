@@ -4,7 +4,7 @@ import uuid
 from django.utils import timezone
 from datetime import timedelta
 
-# 1. HISOB (Account) - Naqd pul, Karta, Valyuta
+
 class Account(models.Model):
     ACCOUNT_TYPES = [
         ('cash', 'Naqd pul'),
@@ -34,8 +34,6 @@ class Account(models.Model):
     def __str__(self):
         return f"{self.name} ({self.get_account_type_display()})"
 
-
-# 2. KIRIM KATEGORIYASI (Income Category)
 class IncomeCategory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='income_categories')
     name = models.CharField(max_length=100, verbose_name='Kategoriya nomi')
@@ -50,7 +48,6 @@ class IncomeCategory(models.Model):
         return self.name
 
 
-# 3. CHIQIM KATEGORIYASI (Expense Category)
 class ExpenseCategory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expense_categories')
     name = models.CharField(max_length=100, verbose_name='Kategoriya nomi')
@@ -65,7 +62,6 @@ class ExpenseCategory(models.Model):
         return self.name
 
 
-# 4. KIRIM (Income)
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='incomes')
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='Hisob')
@@ -84,7 +80,6 @@ class Income(models.Model):
         return f"{self.category} - {self.amount} so'm"
 
 
-# 5. CHIQIM (Expense)
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='expenses')
     account = models.ForeignKey(Account, on_delete=models.CASCADE, verbose_name='Hisob')
@@ -104,8 +99,6 @@ class Expense(models.Model):
     
 
 
-
-# Email Verification Model
 class EmailVerification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='email_verifications')
     code = models.CharField(max_length=6)
@@ -130,7 +123,6 @@ class EmailVerification(models.Model):
         return f"{self.user.username} - {self.code}"
 
 
-# Password Reset Token Model
 class PasswordResetToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='password_reset_tokens')
     token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -156,7 +148,6 @@ class PasswordResetToken(models.Model):
     
 
 
-# Currency Rate Model (Valyuta kurslari)
 class CurrencyRate(models.Model):
     CURRENCY_CHOICES = [
         ('USD', 'Dollar'),

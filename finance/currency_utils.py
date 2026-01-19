@@ -2,7 +2,7 @@ from decimal import Decimal
 from .models import CurrencyRate
 
 def get_exchange_rates():
-    rates = {'UZS': Decimal('1.00')}  # 1 so'm = 1 so'm
+    rates = {'UZS': Decimal('1.00')}
     
     for currency_rate in CurrencyRate.objects.all():
         rates[currency_rate.code] = currency_rate.rate_to_uzs
@@ -31,11 +31,11 @@ def convert_amount(amount, from_currency, to_currency, rates=None):
     
     # MUHIM: Valyuta mavjudligini tekshirish
     if from_currency not in rates:
-        # Agar from_currency UZS bo'lmasa va rates'da yo'q bo'lsa
+        # Agar from_currency UZS bolmasa va rates'da yoq bolsa
         if from_currency != 'UZS':
             rates = get_exchange_rates()  # Qayta olish
         if from_currency not in rates and from_currency != 'UZS':
-            return amount  # Konvert qilish mumkin emas, original qaytarish
+            return amount  # Konvert qilish mumkin emas original qaytarish
     
     if to_currency not in rates:
         if to_currency != 'UZS':
@@ -43,7 +43,7 @@ def convert_amount(amount, from_currency, to_currency, rates=None):
         if to_currency not in rates and to_currency != 'UZS':
             return amount
     
-    # Birinchi UZS ga o'tkazish
+    # Birinchi UZS ga otkazish
     if from_currency == 'UZS':
         amount_in_uzs = amount
     else:

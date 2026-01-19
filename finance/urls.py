@@ -34,8 +34,8 @@ urlpatterns = [
     # Account URLs
     path('accounts/', account_list_view, name='account_list'),
     path('accounts/add/', account_add_view, name='account_add'),
-    path('accounts/<int:pk>/edit/', account_edit_view, name='account_edit'),  # YANGI
-    path('accounts/<int:pk>/delete/', account_delete_view, name='account_delete'),  # YANGI
+    path('accounts/<int:pk>/edit/', account_edit_view, name='account_edit'),
+    path('accounts/<int:pk>/delete/', account_delete_view, name='account_delete'), 
     
     # Category URLs
     path('categories/', category_list_view, name='category_list'),
