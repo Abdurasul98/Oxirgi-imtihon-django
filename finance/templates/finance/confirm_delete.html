@@ -1,5 +1,6 @@
 {% extends 'finance/base.html' %}
 {% load i18n %}
+
 {% block title %}{% trans "O'chirishni tasdiqlash" %}{% endblock %}
 
 {% block content %}
@@ -7,37 +8,51 @@
     <div class="col-md-6">
         <div class="card border-danger">
             <div class="card-header bg-danger text-white">
-                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> {% trans "O'chirishni tasdiqlang"%}</h5>
+                <h5 class="mb-0"><i class="bi bi-exclamation-triangle"></i> {% trans "O'chirishni tasdiqlang" %}</h5>
             </div>
             <div class="card-body">
                 <p class="mb-4">
-                    {% trans "Siz"%} <strong>{{ type }}</strong> {% trans "ni o'chirmoqchisiz:"%}
+                    {% trans "Siz" %} <strong>{{ type }}</strong> {% trans "ni o'chirmoqchisiz:" %}
                 </p>
                 
                 <div class="alert alert-warning">
                     <strong>{{ object }}</strong>
                 </div>
                 
+                <!-- YANGI: Agar hisobda tranzaksiyalar bo'lsa -->
+                {% if has_transactions %}
+                <div class="alert alert-danger">
+                    <i class="bi bi-exclamation-circle"></i> 
+                    <strong>{% trans "DIQQAT!" %}</strong> {% trans "Bu hisobda kirim yoki chiqimlar mavjud! Avval ularni o'chiring yoki boshqa hisobga o'tkazing." %}
+                </div>
+                {% endif %}
+                
                 <p class="text-danger">
                     <i class="bi bi-exclamation-circle"></i> 
-                    {% trans "Bu amal qaytarilmaydi! O'chirilgan ma'lumotlarni tiklab bo'lmaydi."%}
+                    {% trans "Bu amal qaytarilmaydi! O'chirilgan ma'lumotlarni tiklab bo'lmaydi." %}
                 </p>
                 
                 {% if type == 'Kirim' or type == 'Chiqim' %}
                 <div class="alert alert-info">
                     <i class="bi bi-info-circle"></i> 
-                    {% trans "O'chirilgandan keyin hisob balansi avtomatik yangilanadi."%}
+                    {% trans "O'chirilgandan keyin hisob balansi avtomatik yangilanadi." %}
                 </div>
                 {% endif %}
                 
                 <form method="POST">
                     {% csrf_token %}
                     <div class="d-flex gap-2">
-                        <button type="submit" class="btn btn-danger flex-fill">
-                            <i class="bi bi-trash"></i> {% trans "Ha, o'chirish"%}
+                        {% if has_transactions %}
+                        <button type="button" class="btn btn-secondary flex-fill" disabled>
+                            <i class="bi bi-trash"></i> {% trans "O'chirish imkonsiz" %}
                         </button>
-                        <a href="javascript:history.back()" class="btn btn-secondary flex-fill">
-                            <i class="bi bi-x-circle"></i> {% trans "Yo'q, bekor qilish"%}
+                        {% else %}
+                        <button type="submit" class="btn btn-danger flex-fill">
+                            <i class="bi bi-trash"></i> {% trans "Ha, o'chirish" %}
+                        </button>
+                        {% endif %}
+                        <a href="{% url 'finance:account_list' %}" class="btn btn-secondary flex-fill">
+                            <i class="bi bi-x-circle"></i> {% trans "Yo'q, bekor qilish" %}
                         </a>
                     </div>
                 </form>

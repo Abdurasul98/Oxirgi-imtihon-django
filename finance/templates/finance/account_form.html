@@ -1,14 +1,14 @@
 {% extends 'finance/base.html' %}
 {% load i18n %}
 
-{% block title %}{% trans "Hisob qo'shish" %}{% endblock %}
+{% block title %}{{ title }}{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h4 class="mb-0"><i class="bi bi-wallet2"></i> {% trans "Yangi hisob qo'shish" %}</h4>
+                <h4 class="mb-0"><i class="bi bi-wallet2"></i> {{ title }}</h4>
             </div>
             <div class="card-body">
                 <form method="POST">
@@ -32,15 +32,28 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">{% trans "Boshlang'ich balans" %}</label>
+                        <label class="form-label">{% trans "Balans" %}</label>
                         {{ form.balance }}
+                        {% if account %}
+                        <small class="text-muted">{% trans "Joriy balans:" %} {{ account.balance }} {{ account.currency }}</small>
+                        {% else %}
                         <small class="text-muted">{% trans "Hisob yaratilganda mavjud pul miqdori (tanlangan valyutada)" %}</small>
+                        {% endif %}
                     </div>
                     
+                    {% if not account %}
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle"></i> 
                         <strong>{% trans "Eslatma:" %}</strong> {% trans "Keyinchalik kirim va chiqim qo'shganingizda balans avtomatik yangilanadi." %}
                     </div>
+                    {% endif %}
+                    
+                    {% if account %}
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle"></i> 
+                        <strong>{% trans "Diqqat:" %}</strong> {% trans "Balansni o'zgartirish barcha tranzaksiyalarga ta'sir qilishi mumkin. Ehtiyot bo'ling!" %}
+                    </div>
+                    {% endif %}
                     
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary flex-fill">

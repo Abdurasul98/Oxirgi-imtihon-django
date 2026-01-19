@@ -30,6 +30,14 @@
                         <i class="bi bi-calendar"></i> 
                         {{ account.created_at|date:"d.m.Y" }}
                     </small>
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'finance:account_edit' account.pk %}" class="btn btn-sm btn-warning flex-fill">
+                            <i class="bi bi-pencil"></i> {% trans "Tahrirlash" %}
+                        </a>
+                        <a href="{% url 'finance:account_delete' account.pk %}" class="btn btn-sm btn-danger flex-fill">
+                            <i class="bi bi-trash"></i> {% trans "O'chirish" %}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,6 +71,7 @@
                         <th>{% trans "Turi" %}</th>
                         <th>{% trans "Balans" %}</th>
                         <th>{% trans "Yaratilgan" %}</th>
+                        <th>{% trans "Amallar" %}</th> 
                     </tr>
                 </thead>
                 <tbody>
@@ -74,6 +83,15 @@
                             {{ account.balance|floatformat:2 }} {{ account.currency_symbol }}
                         </td>
                         <td>{{ account.created_at|date:"d.m.Y H:i" }}</td>
+                        <!-- YANGI: Amallar -->
+                        <td>
+                            <a href="{% url 'finance:account_edit' account.pk %}" class="btn btn-sm btn-warning">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a href="{% url 'finance:account_delete' account.pk %}" class="btn btn-sm btn-danger">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>

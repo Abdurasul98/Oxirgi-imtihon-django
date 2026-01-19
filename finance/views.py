@@ -442,10 +442,7 @@ def expense_delete_view(request, pk):
         return redirect('finance:expense_list')
     return render(request, 'finance/confirm_delete.html', {'object': expense, 'type': 'Chiqim'})
 
-
-
 # ========== ACCOUNT VIEWS ==========
-
 @login_required
 def account_list_view(request):
     accounts = Account.objects.filter(user=request.user)
@@ -455,7 +452,6 @@ def account_list_view(request):
         account.currency_symbol = get_currency_symbol(account.currency)
     
     return render(request, 'finance/account_list.html', {'accounts': accounts})
-
 
 @login_required
 def account_add_view(request):
@@ -469,11 +465,56 @@ def account_add_view(request):
             return redirect('finance:account_list')
     else:
         form = AccountForm()
-    return render(request, 'finance/account_form.html', {'form': form})
+    return render(request, 'finance/account_form.html', {'form': form, 'title': 'Hisob qo\'shish'})
+
+# YANGI: Account Edit
+@login_required
+def account_edit_view(request, pk):
+    account = get_object_or_404(Account, pk=pk, user=request.user)
+    
+    if request.method == 'POST':
+        form = AccountForm(request.POST, instance=account)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Hisob tahrirlandi!')
+            return redirect('finance:account_list')
+    else:
+        form = AccountForm(instance=account)
+    
+    return render(request, 'finance/account_form.html', {
+        'form': form, 
+        'title': 'Hisobni tahrirlash',
+        'account': account
+    })
+
+# YANGI: Account Delete
+@login_required
+def account_delete_view(request, pk):
+    account = get_object_or_404(Account, pk=pk, user=request.user)
+    
+    # Tekshirish: Bu hisobda kirim yoki chiqim bormi?
+    has_transactions = (
+        Income.objects.filter(account=account).exists() or 
+        Expense.objects.filter(account=account).exists()
+    )
+    
+    if request.method == 'POST':
+        if has_transactions:
+            messages.error(request, 'Bu hisobda tranzaksiyalar mavjud! Avval ularni o\'chiring.')
+            return redirect('finance:account_list')
+        
+        account.delete()
+        messages.success(request, 'Hisob o\'chirildi!')
+        return redirect('finance:account_list')
+    
+    return render(request, 'finance/confirm_delete.html', {
+        'object': account, 
+        'type': 'Hisob',
+        'has_transactions': has_transactions
+    })
 
 
 # ========== CATEGORY VIEWS ==========
-
 @login_required
 def category_list_view(request):
     income_categories = IncomeCategory.objects.filter(user=request.user)
