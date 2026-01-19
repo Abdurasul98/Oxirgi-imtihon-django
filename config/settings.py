@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -16,10 +15,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
+DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -37,7 +35,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',  # <-- SHU QATORNI QO'SHING
+    'django.middleware.locale.LocaleMiddleware', 
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -68,23 +66,17 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'finance_db',
+        'USER': 'n69',
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': 'localhost',
+        'PORT': '5432', 
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME'),
-#         'USER': os.getenv('DB_USER'),
-#         'PASSWORD': os.getenv('DB_PASSWORD'),
-#         'HOST': os.getenv('DB_HOST'),
-#         'PORT': os.getenv('DB_PORT'),
-#     }
-# }
 
 
 
@@ -124,8 +116,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-
-
 MESSAGE_TAGS = {
     messages.DEBUG: 'info',
     messages.INFO: 'info',
@@ -134,8 +124,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'danger',
 }
 
-
-# Login Settings
 LOGIN_URL = 'finance:login'
 LOGIN_REDIRECT_URL = 'finance:dashboard'
 LOGOUT_REDIRECT_URL = 'finance:login'
@@ -145,12 +133,11 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')  # <-- SHU JOYGA O'Z EMAILINGIZNI YOZING
+EMAIL_HOST_USER = 'abdurasul15.10.1998@gmail.com'  # <-- SHU JOYGA O'Z EMAILINGIZNI YOZING
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')  # <-- SHU JOYGA APP PASSWORD NI YOZING (16 ta belgi)
 DEFAULT_FROM_EMAIL = 'abdurasul15.10.1998@gmail.com'
 
 EMAIL_VERIFICATION_REQUIRED = True
-
 
 # Internationalization (Ko'p tillilik)
 from django.utils.translation import gettext_lazy as _
