@@ -226,12 +226,10 @@ def dashboard_view(request):
     total_balance_in_selected = Decimal('0.00')
     
     for account in accounts:
-        # Original qiymatlarni saqlash
         account.original_balance = account.balance
         account.original_currency = account.currency
         account.original_symbol = get_currency_symbol(account.currency)
         
-        # Konvert qilingan qiymat
         account.converted_balance = convert_amount(
             account.balance,
             account.currency,
@@ -239,39 +237,34 @@ def dashboard_view(request):
             rates
         )
         
-        # Jami balansga qo'shish
         total_balance_in_selected += account.converted_balance
     
-    # YANGI: Bugungi kirim va chiqim (HAR BIR TRANZAKSIYANI KONVERT QILISH)
+    # Bugungi kirim va chiqim
     today = date.today()
     
-    # Bugungi kirimlar
     today_incomes = Income.objects.filter(user=user, date=today)
     today_income = Decimal('0.00')
     for income in today_incomes:
-        # Har bir kirimni selected valyutaga konvert qilish
         converted = convert_amount(
             income.amount,
-            income.account.currency,  # Kirim qaysi valyutada
+            income.account.currency,
             selected_currency,
             rates
         )
         today_income += converted
     
-    # Bugungi chiqimlar
     today_expenses = Expense.objects.filter(user=user, date=today)
     today_expense = Decimal('0.00')
     for expense in today_expenses:
-        # Har bir chiqimni selected valyutaga konvert qilish
         converted = convert_amount(
             expense.amount,
-            expense.account.currency,  # Chiqim qaysi valyutada
+            expense.account.currency,
             selected_currency,
             rates
         )
         today_expense += converted
     
-    # YANGI: Jami kirim va chiqim (BARCHA TRANZAKSIYALARNI KONVERT QILISH)
+    # Jami kirim va chiqim
     all_incomes = Income.objects.filter(user=user)
     total_income = Decimal('0.00')
     for income in all_incomes:
@@ -298,7 +291,6 @@ def dashboard_view(request):
     recent_incomes = Income.objects.filter(user=user)[:5]
     recent_expenses = Expense.objects.filter(user=user)[:5]
     
-    # Har biriga valyuta belgisini qo'shish
     for income in recent_incomes:
         income.currency_symbol = get_currency_symbol(income.account.currency)
     
