@@ -1,0 +1,178 @@
+{% extends 'finance/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Profil" %}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4"><i class="bi bi-person-circle text-primary"></i> {% trans "Profil" %}</h2>
+
+<!-- Statistika -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card border-primary">
+            <div class="card-body text-center">
+                <i class="bi bi-wallet2 text-primary" style="font-size: 2rem;"></i>
+                <h3 class="mt-2">{{ total_accounts }}</h3>
+                <p class="text-muted mb-0">{% trans "Hisoblar" %}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card border-success">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-down-circle text-success" style="font-size: 2rem;"></i>
+                <h3 class="mt-2">{{ total_incomes }}</h3>
+                <p class="text-muted mb-0">{% trans "Kirimlar soni" %}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card border-danger">
+            <div class="card-body text-center">
+                <i class="bi bi-arrow-up-circle text-danger" style="font-size: 2rem;"></i>
+                <h3 class="mt-2">{{ total_expenses }}</h3>
+                <p class="text-muted mb-0">{% trans "Chiqimlar soni" %}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card stat-card border-info">
+            <div class="card-body text-center">
+                <i class="bi bi-calendar-check text-info" style="font-size: 2rem;"></i>
+                <h6 class="mt-2 mb-0">{{ member_since|date:"d.m.Y" }}</h6>
+                <p class="text-muted mb-0">{% trans "A'zo bo'lgan" %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Profil ma'lumotlari -->
+<div class="row">
+    <!-- Profil tahrirlash -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="bi bi-person"></i> {% trans "Profil ma'lumotlari" %}</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Foydalanuvchi nomi" %}</label>
+                        <input type="text" class="form-control" value="{{ user.username }}" disabled>
+                        <small class="text-muted">{% trans "Username o'zgartirib bo'lmaydi" %}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Ism" %}</label>
+                        {{ profile_form.first_name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Familiya" %}</label>
+                        {{ profile_form.last_name }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Email" %}</label>
+                        {{ profile_form.email }}
+                        {% if profile_form.email.errors %}
+                            <div class="text-danger">{{ profile_form.email.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" name="update_profile" class="btn btn-primary w-100">
+                        <i class="bi bi-check-circle"></i> {% trans "Saqlash" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Parol o'zgartirish -->
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="bi bi-lock"></i> {% trans "Parolni o'zgartirish" %}</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Eski parol" %}</label>
+                        {{ password_form.old_password }}
+                        {% if password_form.old_password.errors %}
+                            <div class="text-danger">{{ password_form.old_password.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Yangi parol" %}</label>
+                        {{ password_form.new_password1 }}
+                        {% if password_form.new_password1.errors %}
+                            <div class="text-danger">{{ password_form.new_password1.errors }}</div>
+                        {% endif %}
+                        <small class="text-muted">{% trans "Kamida 8 ta belgi" %}</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">{% trans "Yangi parolni tasdiqlash" %}</label>
+                        {{ password_form.new_password2 }}
+                        {% if password_form.new_password2.errors %}
+                            <div class="text-danger">{{ password_form.new_password2.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" name="change_password" class="btn btn-warning w-100">
+                        <i class="bi bi-key"></i> {% trans "Parolni o'zgartirish" %}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Moliyaviy xulosа -->
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0"><i class="bi bi-graph-up"></i> {% trans "Umumiy moliyaviy ko'rsatkichlar" %}</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-success"><i class="bi bi-arrow-down"></i> {% trans "Jami kirim" %}:</span>
+                    <strong class="text-success">{{ total_income_amount|floatformat:0 }} {% trans "so'm" %}</strong>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-danger"><i class="bi bi-arrow-up"></i> {% trans "Jami chiqim" %}:</span>
+                    <strong class="text-danger">{{ total_expense_amount|floatformat:0 }} {% trans "so'm" %}</strong>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="d-flex justify-content-between">
+            <span class="fs-5"><i class="bi bi-wallet2"></i> {% trans "Balans" %}:</span>
+            <strong class="fs-4 {% if total_income_amount >= total_expense_amount %}text-success{% else %}text-danger{% endif %}">
+                {{ total_income_amount|add:"-"|add:total_expense_amount|floatformat:0 }} {% trans "so'm" %}
+            </strong>
+        </div>
+    </div>
+</div>
+
+<style>
+    input.form-control, select.form-control {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+    }
+</style>
+{% endblock %}

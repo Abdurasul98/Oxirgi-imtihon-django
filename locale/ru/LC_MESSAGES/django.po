@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 21:43+0500\n"
+"POT-Creation-Date: 2026-01-20 02:33+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,6 +56,7 @@ msgstr "В какой валюте этот счет?"
 #: .\finance\templates\finance\account_form.html:35
 #: .\finance\templates\finance\account_list.html:72
 #: .\finance\templates\finance\dashboard.html:32
+#: .\finance\templates\finance\profile.html:162
 msgid "Balans"
 msgstr "Баланс"
 
@@ -85,12 +86,12 @@ msgstr "Внимание:"
 msgid ""
 "Balansni o'zgartirish barcha tranzaksiyalarga ta'sir qilishi mumkin. Ehtiyot "
 "bo'ling!"
-msgstr ""
-"Изменение баланса может повлиять на все транзакции. Будьте осторожны!"
+msgstr "Изменение баланса может повлиять на все транзакции. Будьте осторожны!"
 
 #: .\finance\templates\finance\account_form.html:60
 #: .\finance\templates\finance\expense_form.html:44
 #: .\finance\templates\finance\income_form.html:44
+#: .\finance\templates\finance\profile.html:89
 msgid "Saqlash"
 msgstr "Сохранить"
 
@@ -104,6 +105,7 @@ msgstr "Отмена"
 #: .\finance\templates\finance\account_list.html:8
 #: .\finance\templates\finance\base.html:74
 #: .\finance\templates\finance\dashboard.html:86
+#: .\finance\templates\finance\profile.html:16
 msgid "Hisoblar"
 msgstr "Счета"
 
@@ -178,11 +180,17 @@ msgstr "Категории"
 msgid "Hisobotlar"
 msgstr "Отчеты"
 
-#: .\finance\templates\finance\base.html:87
+#: .\finance\templates\finance\base.html:83
+#: .\finance\templates\finance\profile.html:4
+#: .\finance\templates\finance\profile.html:7
+msgid "Profil"
+msgstr "Профиль"
+
+#: .\finance\templates\finance\base.html:90
 msgid "Til"
 msgstr "Язык"
 
-#: .\finance\templates\finance\base.html:108
+#: .\finance\templates\finance\base.html:111
 msgid "Chiqish"
 msgstr "Выход"
 
@@ -265,7 +273,8 @@ msgid ""
 "Bu hisobda kirim yoki chiqimlar mavjud! Avval ularni o'chiring yoki boshqa "
 "hisobga o'tkazing."
 msgstr ""
-"В этом счёте есть доходы или расходы! Сначала удалите их или перенесите на другой счёт."
+"В этом счёте есть доходы или расходы! Сначала удалите их или перенесите на "
+"другой счёт."
 
 #: .\finance\templates\finance\confirm_delete.html:32
 msgid "Bu amal qaytarilmaydi! O'chirilgan ma'lumotlarni tiklab bo'lmaydi."
@@ -289,12 +298,14 @@ msgstr "Нет, отменить"
 
 #: .\finance\templates\finance\dashboard.html:14
 #: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\profile.html:149
 #: .\finance\templates\finance\reports.html:51
 msgid "Jami kirim"
 msgstr "Всего доходов"
 
 #: .\finance\templates\finance\dashboard.html:23
 #: .\finance\templates\finance\expense_list.html:16
+#: .\finance\templates\finance\profile.html:155
 #: .\finance\templates\finance\reports.html:60
 msgid "Jami chiqim"
 msgstr "Всего расходов"
@@ -338,6 +349,9 @@ msgstr "ОБЩИЙ БАЛАНС:"
 #: .\finance\templates\finance\dashboard.html:138
 #: .\finance\templates\finance\expense_list.html:16
 #: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\profile.html:150
+#: .\finance\templates\finance\profile.html:156
+#: .\finance\templates\finance\profile.html:164
 #: .\finance\templates\finance\reports.html:52
 #: .\finance\templates\finance\reports.html:61
 #: .\finance\templates\finance\reports.html:71
@@ -493,6 +507,7 @@ msgid "Birinchi kirimni qo'shing"
 msgstr "Добавьте первый доход"
 
 #: .\finance\templates\finance\login.html:17
+#: .\finance\templates\finance\profile.html:65
 #: .\finance\templates\finance\register.html:17
 msgid "Foydalanuvchi nomi"
 msgstr "Имя пользователя"
@@ -510,15 +525,72 @@ msgstr "Нет аккаунта?"
 msgid "Ro'yxatdan o'ting"
 msgstr "Зарегистрироваться"
 
+#: .\finance\templates\finance\profile.html:26
+msgid "Kirimlar soni"
+msgstr "Количество доходов"
+
+#: .\finance\templates\finance\profile.html:36
+msgid "Chiqimlar soni"
+msgstr "Количество расходов"
+
+#: .\finance\templates\finance\profile.html:46
+msgid "A'zo bo'lgan"
+msgstr "Дата регистрации"
+
+#: .\finance\templates\finance\profile.html:58
+msgid "Profil ma'lumotlari"
+msgstr "Информация профиля"
+
+#: .\finance\templates\finance\profile.html:67
+msgid "Username o'zgartirib bo'lmaydi"
+msgstr "Имя пользователя нельзя изменить"
+
+#: .\finance\templates\finance\profile.html:71
+msgid "Ism"
+msgstr "Имя"
+
+#: .\finance\templates\finance\profile.html:76
+msgid "Familiya"
+msgstr "Фамилия"
+
+#: .\finance\templates\finance\profile.html:81
+#: .\finance\templates\finance\register.html:25
+msgid "Email"
+msgstr "Электронная почта"
+
+#: .\finance\templates\finance\profile.html:100
+#: .\finance\templates\finance\profile.html:132
+#: .\finance\templates\finance\reset_password.html:47
+msgid "Parolni o'zgartirish"
+msgstr "Сменить пароль"
+
+#: .\finance\templates\finance\profile.html:107
+msgid "Eski parol"
+msgstr "Старый пароль"
+
+#: .\finance\templates\finance\profile.html:115
+#: .\finance\templates\finance\reset_password.html:21
+msgid "Yangi parol"
+msgstr "Новый пароль"
+
+#: .\finance\templates\finance\profile.html:120
+#: .\finance\templates\finance\reset_password.html:30
+msgid "Kamida 8 ta belgi"
+msgstr "Не менее 8 символов"
+
+#: .\finance\templates\finance\profile.html:124
+msgid "Yangi parolni tasdiqlash"
+msgstr "Подтвердить новый пароль"
+
+#: .\finance\templates\finance\profile.html:143
+msgid "Umumiy moliyaviy ko'rsatkichlar"
+msgstr "Финансовая сводка"
+
 #: .\finance\templates\finance\register.html:4
 #: .\finance\templates\finance\register.html:11
 #: .\finance\templates\finance\register.html:49
 msgid "Ro'yxatdan o'tish"
 msgstr "Регистрация"
-
-#: .\finance\templates\finance\register.html:25
-msgid "Email"
-msgstr "Электронная почта"
 
 #: .\finance\templates\finance\register.html:25
 msgid "Tasdiqlash kodi yuboriladi"
@@ -618,21 +690,9 @@ msgstr "Установить новый пароль"
 msgid "Kuchli parol tanlang"
 msgstr "Выберите надежный пароль"
 
-#: .\finance\templates\finance\reset_password.html:21
-msgid "Yangi parol"
-msgstr "Новый пароль"
-
-#: .\finance\templates\finance\reset_password.html:30
-msgid "Kamida 8 ta belgi"
-msgstr "Не менее 8 символов"
-
 #: .\finance\templates\finance\reset_password.html:43
 msgid "Yuqoridagi parolni qayta kiriting"
 msgstr "Повторите указанный выше пароль"
-
-#: .\finance\templates\finance\reset_password.html:47
-msgid "Parolni o'zgartirish"
-msgstr "Сменить пароль"
 
 #: .\finance\templates\finance\reset_password.html:56
 msgid "Kirish sahifasiga qaytish"

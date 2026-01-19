@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-19 21:43+0500\n"
+"POT-Creation-Date: 2026-01-20 02:33+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,6 +54,7 @@ msgstr "Which currency is this account in?"
 #: .\finance\templates\finance\account_form.html:35
 #: .\finance\templates\finance\account_list.html:72
 #: .\finance\templates\finance\dashboard.html:32
+#: .\finance\templates\finance\profile.html:162
 msgid "Balans"
 msgstr "Balance"
 
@@ -91,6 +92,7 @@ msgstr "Changing the balance may affect all transactions. Be careful!"
 #: .\finance\templates\finance\account_form.html:60
 #: .\finance\templates\finance\expense_form.html:44
 #: .\finance\templates\finance\income_form.html:44
+#: .\finance\templates\finance\profile.html:89
 msgid "Saqlash"
 msgstr "Save"
 
@@ -104,6 +106,7 @@ msgstr "Cancel"
 #: .\finance\templates\finance\account_list.html:8
 #: .\finance\templates\finance\base.html:74
 #: .\finance\templates\finance\dashboard.html:86
+#: .\finance\templates\finance\profile.html:16
 msgid "Hisoblar"
 msgstr "Accounts"
 
@@ -178,11 +181,17 @@ msgstr "Categories"
 msgid "Hisobotlar"
 msgstr "Reports"
 
-#: .\finance\templates\finance\base.html:87
+#: .\finance\templates\finance\base.html:83
+#: .\finance\templates\finance\profile.html:4
+#: .\finance\templates\finance\profile.html:7
+msgid "Profil"
+msgstr "Profile"
+
+#: .\finance\templates\finance\base.html:90
 msgid "Til"
 msgstr "Language"
 
-#: .\finance\templates\finance\base.html:108
+#: .\finance\templates\finance\base.html:111
 msgid "Chiqish"
 msgstr "Logout"
 
@@ -264,7 +273,9 @@ msgstr "WARNING!"
 msgid ""
 "Bu hisobda kirim yoki chiqimlar mavjud! Avval ularni o'chiring yoki boshqa "
 "hisobga o'tkazing."
-msgstr "This account has incomes or expenses! Please delete them first or transfer to another account."
+msgstr ""
+"This account has incomes or expenses! Please delete them first or transfer "
+"to another account."
 
 #: .\finance\templates\finance\confirm_delete.html:32
 msgid "Bu amal qaytarilmaydi! O'chirilgan ma'lumotlarni tiklab bo'lmaydi."
@@ -288,12 +299,14 @@ msgstr "No, cancel"
 
 #: .\finance\templates\finance\dashboard.html:14
 #: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\profile.html:149
 #: .\finance\templates\finance\reports.html:51
 msgid "Jami kirim"
 msgstr "Total Income"
 
 #: .\finance\templates\finance\dashboard.html:23
 #: .\finance\templates\finance\expense_list.html:16
+#: .\finance\templates\finance\profile.html:155
 #: .\finance\templates\finance\reports.html:60
 msgid "Jami chiqim"
 msgstr "Total Expense"
@@ -337,6 +350,9 @@ msgstr "TOTAL BALANCE:"
 #: .\finance\templates\finance\dashboard.html:138
 #: .\finance\templates\finance\expense_list.html:16
 #: .\finance\templates\finance\income_list.html:16
+#: .\finance\templates\finance\profile.html:150
+#: .\finance\templates\finance\profile.html:156
+#: .\finance\templates\finance\profile.html:164
 #: .\finance\templates\finance\reports.html:52
 #: .\finance\templates\finance\reports.html:61
 #: .\finance\templates\finance\reports.html:71
@@ -492,6 +508,7 @@ msgid "Birinchi kirimni qo'shing"
 msgstr "Add your first income"
 
 #: .\finance\templates\finance\login.html:17
+#: .\finance\templates\finance\profile.html:65
 #: .\finance\templates\finance\register.html:17
 msgid "Foydalanuvchi nomi"
 msgstr "Username"
@@ -509,15 +526,72 @@ msgstr "Don’t have an account?"
 msgid "Ro'yxatdan o'ting"
 msgstr "Register"
 
+#: .\finance\templates\finance\profile.html:26
+msgid "Kirimlar soni"
+msgstr "Number of incomes"
+
+#: .\finance\templates\finance\profile.html:36
+msgid "Chiqimlar soni"
+msgstr "Number of expenses"
+
+#: .\finance\templates\finance\profile.html:46
+msgid "A'zo bo'lgan"
+msgstr "Joined"
+
+#: .\finance\templates\finance\profile.html:58
+msgid "Profil ma'lumotlari"
+msgstr "Profile information"
+
+#: .\finance\templates\finance\profile.html:67
+msgid "Username o'zgartirib bo'lmaydi"
+msgstr "Username cannot be changed"
+
+#: .\finance\templates\finance\profile.html:71
+msgid "Ism"
+msgstr "First name"
+
+#: .\finance\templates\finance\profile.html:76
+msgid "Familiya"
+msgstr "Last name"
+
+#: .\finance\templates\finance\profile.html:81
+#: .\finance\templates\finance\register.html:25
+msgid "Email"
+msgstr "Email"
+
+#: .\finance\templates\finance\profile.html:100
+#: .\finance\templates\finance\profile.html:132
+#: .\finance\templates\finance\reset_password.html:47
+msgid "Parolni o'zgartirish"
+msgstr "Change password"
+
+#: .\finance\templates\finance\profile.html:107
+msgid "Eski parol"
+msgstr "Old password"
+
+#: .\finance\templates\finance\profile.html:115
+#: .\finance\templates\finance\reset_password.html:21
+msgid "Yangi parol"
+msgstr "New password"
+
+#: .\finance\templates\finance\profile.html:120
+#: .\finance\templates\finance\reset_password.html:30
+msgid "Kamida 8 ta belgi"
+msgstr "At least 8 characters"
+
+#: .\finance\templates\finance\profile.html:124
+msgid "Yangi parolni tasdiqlash"
+msgstr "Confirm new password"
+
+#: .\finance\templates\finance\profile.html:143
+msgid "Umumiy moliyaviy ko'rsatkichlar"
+msgstr "Overall financial indicators"
+
 #: .\finance\templates\finance\register.html:4
 #: .\finance\templates\finance\register.html:11
 #: .\finance\templates\finance\register.html:49
 msgid "Ro'yxatdan o'tish"
 msgstr "Sign Up"
-
-#: .\finance\templates\finance\register.html:25
-msgid "Email"
-msgstr "Email"
 
 #: .\finance\templates\finance\register.html:25
 msgid "Tasdiqlash kodi yuboriladi"
@@ -617,21 +691,9 @@ msgstr "Set a new password"
 msgid "Kuchli parol tanlang"
 msgstr "Choose a strong password"
 
-#: .\finance\templates\finance\reset_password.html:21
-msgid "Yangi parol"
-msgstr "New password"
-
-#: .\finance\templates\finance\reset_password.html:30
-msgid "Kamida 8 ta belgi"
-msgstr "At least 8 characters"
-
 #: .\finance\templates\finance\reset_password.html:43
 msgid "Yuqoridagi parolni qayta kiriting"
 msgstr "Re-enter the password above"
-
-#: .\finance\templates\finance\reset_password.html:47
-msgid "Parolni o'zgartirish"
-msgstr "Change password"
 
 #: .\finance\templates\finance\reset_password.html:56
 msgid "Kirish sahifasiga qaytish"

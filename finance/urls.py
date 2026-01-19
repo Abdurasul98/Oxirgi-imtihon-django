@@ -1,5 +1,8 @@
 from django.urls import path
-from .views import register_view,login_view,logout_view,dashboard_view,income_list_view,income_add_view,income_edit_view,income_delete_view,expense_list_view,expense_add_view,expense_edit_view,expense_delete_view,account_list_view,account_add_view,category_list_view,reports_view,verify_email_view,resend_verification_code,forgot_password_view,reset_password_view,account_edit_view,account_delete_view
+from .views import (register_view,login_view,logout_view,dashboard_view,income_list_view,income_add_view,income_edit_view,income_delete_view,
+                    expense_list_view,expense_add_view,expense_edit_view,expense_delete_view,account_list_view,account_add_view,
+                    category_list_view,reports_view,verify_email_view,resend_verification_code,forgot_password_view,reset_password_view,
+                    account_edit_view,account_delete_view,profile_view)
 
 app_name = 'finance'
 
@@ -39,4 +42,8 @@ urlpatterns = [
 
     # Reports URL - SHU QATORNI QO'SHING
     path('reports/', reports_view, name='reports'),
+
+
+    # Profil URL - YANGI
+    path('profile/', profile_view, name='profile'),
 ]

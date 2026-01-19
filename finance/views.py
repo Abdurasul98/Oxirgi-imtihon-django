@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate,update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Sum
@@ -7,7 +7,7 @@ from datetime import date, timedelta,datetime
 from .models import Income, Expense, Account, IncomeCategory, ExpenseCategory,EmailVerification, PasswordResetToken
 from .forms import (
     UserRegisterForm, IncomeForm, ExpenseForm, AccountForm,
-    IncomeCategoryForm, ExpenseCategoryForm
+    IncomeCategoryForm, ExpenseCategoryForm,UserProfileForm
 )
 from .utils import generate_verification_code, send_verification_email, send_password_reset_email
 from django.contrib.auth.models import User
@@ -17,6 +17,7 @@ from .currency_utils import get_exchange_rates, convert_amount, get_currency_sym
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.db.models.functions import TruncDate
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 # ========== AUTHENTICATION VIEWS (YANGILANGAN) ==========
@@ -725,3 +726,65 @@ def reports_view(request):
     }
     
     return render(request, 'finance/reports.html', context)
+
+
+# ========== PROFIL VIEW ==========
+@login_required
+def profile_view(request):
+    user = request.user
+    
+    # User statistikasi
+    total_accounts = Account.objects.filter(user=user).count()
+    total_incomes = Income.objects.filter(user=user).count()
+    total_expenses = Expense.objects.filter(user=user).count()
+    
+    # Jami summa (so'mda)
+    rates = get_exchange_rates()
+    
+    all_incomes = Income.objects.filter(user=user)
+    total_income_amount = Decimal('0.00')
+    for income in all_incomes:
+        converted = convert_amount(income.amount, income.account.currency, 'UZS', rates)
+        total_income_amount += converted
+    
+    all_expenses = Expense.objects.filter(user=user)
+    total_expense_amount = Decimal('0.00')
+    for expense in all_expenses:
+        converted = convert_amount(expense.amount, expense.account.currency, 'UZS', rates)
+        total_expense_amount += converted
+    
+    # Profil formasi
+    if request.method == 'POST':
+        if 'update_profile' in request.POST:
+            profile_form = UserProfileForm(request.POST, instance=user)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, 'Profil muvaffaqiyatli yangilandi!')
+                return redirect('finance:profile')
+            password_form = PasswordChangeForm(user)
+        
+        elif 'change_password' in request.POST:
+            password_form = PasswordChangeForm(user, request.POST)
+            if password_form.is_valid():
+                user = password_form.save()
+                # Parol o'zgargandan keyin session yangilanishi kerak
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Parol muvaffaqiyatli o\'zgartirildi!')
+                return redirect('finance:profile')
+            profile_form = UserProfileForm(instance=user)
+    else:
+        profile_form = UserProfileForm(instance=user)
+        password_form = PasswordChangeForm(user)
+    
+    context = {
+        'profile_form': profile_form,
+        'password_form': password_form,
+        'total_accounts': total_accounts,
+        'total_incomes': total_incomes,
+        'total_expenses': total_expenses,
+        'total_income_amount': total_income_amount,
+        'total_expense_amount': total_expense_amount,
+        'member_since': user.date_joined,
+    }
+    
+    return render(request, 'finance/profile.html', context)
