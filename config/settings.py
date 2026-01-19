@@ -155,7 +155,7 @@ EMAIL_VERIFICATION_REQUIRED = True
 # Internationalization (Ko'p tillilik)
 from django.utils.translation import gettext_lazy as _
 
-LANGUAGE_CODE = 'uz'  # Default til
+LANGUAGE_CODE = 'uz'
 
 LANGUAGES = [
     ('uz', _('O\'zbek')),

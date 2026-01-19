@@ -3,11 +3,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 def generate_verification_code():
-    """6 raqamli tasodifiy kod yaratish"""
     return str(random.randint(100000, 999999))
 
 def send_verification_email(user, code):
-    """Email verification kodi yuborish"""
     subject = 'Email tasdiqlanh kodi'
     message = f"""
     Salom {user.username}!
@@ -16,12 +14,9 @@ def send_verification_email(user, code):
     
     KOD: {code}
     
-    Bu kod 10 daqiqa davomida amal qiladi.
+    Bu kod 3 minut davomida amal qiladi.
     
     Agar siz ro'yxatdan o'tmagan bo'lsangiz, bu xabarni e'tiborga olmang.
-    
-    Hurmat bilan,
-    Finance Team
     """
     
     send_mail(
@@ -44,12 +39,9 @@ def send_password_reset_email(user, token):
     
     {reset_url}
     
-    Bu link 1 soat davomida amal qiladi.
+    Bu link 3 minut davomida amal qiladi.
     
-    Agar siz parolni tiklahmagan bo'lsangiz, bu xabarni e'tiborga olmang.
-    
-    Hurmat bilan,
-    Finance Team
+    Agar siz parolni tiklashnii bosmagan bo'lsangiz, bu xabarni e'tiborga olmang.
     """
     
     send_mail(

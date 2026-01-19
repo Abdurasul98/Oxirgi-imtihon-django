@@ -22,7 +22,7 @@ class Account(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accounts')
     name = models.CharField(max_length=100, verbose_name='Hisob nomi')
     account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPES, verbose_name='Hisob turi')
-    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='UZS', verbose_name='Valyuta')  # YANGI
+    currency = models.CharField(max_length=3, choices=CURRENCY_CHOICES, default='UZS', verbose_name='Valyuta')
     balance = models.DecimalField(max_digits=12, decimal_places=2, default=0, verbose_name='Balans')
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -108,14 +108,14 @@ class Expense(models.Model):
 # Email Verification Model
 class EmailVerification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='email_verifications')
-    code = models.CharField(max_length=6)  # 6 raqamli kod
+    code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField()
     is_verified = models.BooleanField(default=False)
     
     def save(self, *args, **kwargs):
         if not self.expires_at:
-            self.expires_at = timezone.now() + timedelta(minutes=10)  # 10 daqiqa amal qiladi
+            self.expires_at = timezone.now() + timedelta(minutes=3)  
         super().save(*args, **kwargs)
     
     def is_expired(self):
@@ -140,7 +140,7 @@ class PasswordResetToken(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.expires_at:
-            self.expires_at = timezone.now() + timedelta(hours=1)  # 1 soat amal qiladi
+            self.expires_at = timezone.now() + timedelta(minutes=3)
         super().save(*args, **kwargs)
     
     def is_expired(self):

@@ -61,7 +61,6 @@ class ExpenseForm(forms.ModelForm):
         amount = cleaned_data.get('amount')
         
         if account and amount:
-            # Agar edit qilinyotgan bo'lsa (instance mavjud)
             if self.instance and self.instance.pk:
                 # Eski summa qaytariladi, yangi summa olinadi
                 old_amount = self.instance.amount
@@ -110,7 +109,6 @@ class AccountForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # Agar "Valyuta" tipini tanlasa, currency field ko'rinadi
-        # JavaScript orqali buni qilish mumkin, lekin hozircha hammasi ko'rinadi
 
 # Income Category Form
 class IncomeCategoryForm(forms.ModelForm):
