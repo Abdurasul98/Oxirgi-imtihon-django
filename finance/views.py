@@ -319,10 +319,20 @@ def dashboard_view(request):
 @login_required
 def income_list_view(request):
     incomes = Income.objects.filter(user=request.user)
-    total = incomes.aggregate(total=Sum('amount'))['total'] or 0
+    # YANGI: Har bir kirimni UZS ga konvert qilib jami hisoblash
+    rates = get_exchange_rates()
+    total = Decimal('0.00')
     
-    # Har bir kirim uchun valyuta belgisini qo'shish
     for income in incomes:
+        # Har bir kirimni so'mga konvert qilish
+        converted = convert_amount(
+            income.amount,
+            income.account.currency,
+            'UZS',
+            rates
+        )
+        total += converted
+        # Har bir kirim uchun valyuta belgisini qo'shish
         income.currency_symbol = get_currency_symbol(income.account.currency)
     
     context = {
@@ -376,10 +386,22 @@ def income_delete_view(request, pk):
 @login_required
 def expense_list_view(request):
     expenses = Expense.objects.filter(user=request.user)
-    total = expenses.aggregate(total=Sum('amount'))['total'] or 0
     
-    # Har bir chiqim uchun valyuta belgisini qo'shish
+    # YANGI: Har bir chiqimni UZS ga konvert qilib jami hisoblash
+    rates = get_exchange_rates()
+    total = Decimal('0.00')
+    
     for expense in expenses:
+        # Har bir chiqimni so'mga konvert qilish
+        converted = convert_amount(
+            expense.amount,
+            expense.account.currency,
+            'UZS',
+            rates
+        )
+        total += converted
+        
+        # Har bir chiqim uchun valyuta belgisini qo'shish
         expense.currency_symbol = get_currency_symbol(expense.account.currency)
     
     context = {
@@ -547,6 +569,61 @@ def category_list_view(request):
         'expense_form': ExpenseCategoryForm(),
     }
     return render(request, 'finance/category_list.html', context)
+
+@login_required
+def income_category_delete_view(request, pk):
+    category = get_object_or_404(IncomeCategory, pk=pk, user=request.user)
+    
+    # Tekshirish: bu kategoriyada kirimlar bormi?
+    incomes_count = Income.objects.filter(category=category).count()
+    
+    if request.method == 'POST':
+        if incomes_count > 0:
+            messages.warning(
+                request, 
+                f'Bu kategoriyada {incomes_count} ta kirim mavjud. '
+                f'Avval ularni boshqa kategoriyaga o\'tkazing yoki o\'chiring!'
+            )
+        else:
+            category_name = category.name
+            category.delete()
+            messages.success(request, f'"{category_name}" kategoriyasi o\'chirildi!')
+        return redirect('finance:category_list')
+    
+    context = {
+        'object': category,
+        'type': 'Kirim kategoriyasi',
+        'incomes_count': incomes_count,
+    }
+    return render(request, 'finance/category_confirm_delete.html', context)
+
+
+@login_required
+def expense_category_delete_view(request, pk):
+    category = get_object_or_404(ExpenseCategory, pk=pk, user=request.user)
+    
+    # Tekshirish: bu kategoriyada chiqimlar bormi?
+    expenses_count = Expense.objects.filter(category=category).count()
+    
+    if request.method == 'POST':
+        if expenses_count > 0:
+            messages.warning(
+                request, 
+                f'Bu kategoriyada {expenses_count} ta chiqim mavjud. '
+                f'Avval ularni boshqa kategoriyaga o\'tkazing yoki o\'chiring!'
+            )
+        else:
+            category_name = category.name
+            category.delete()
+            messages.success(request, f'"{category_name}" kategoriyasi o\'chirildi!')
+        return redirect('finance:category_list')
+    
+    context = {
+        'object': category,
+        'type': 'Chiqim kategoriyasi',
+        'expenses_count': expenses_count,
+    }
+    return render(request, 'finance/category_confirm_delete.html', context)
 
 
 # ========== HISOBOTLAR (REPORTS) ==========

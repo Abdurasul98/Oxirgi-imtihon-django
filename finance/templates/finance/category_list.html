@@ -30,8 +30,16 @@
                 <ul class="list-group">
                     {% for category in income_categories %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-tag-fill text-success"></i> {{ category.name }}</span>
-                        <small class="text-muted">{{ category.created_at|date:"d.m.Y" }}</small>
+                        <div>
+                            <i class="bi bi-tag-fill text-success"></i> {{ category.name }}
+                            <br><small class="text-muted">{{ category.created_at|date:"d.m.Y" }}</small>
+                        </div>
+                        <!-- YANGI: O'chirish tugmasi -->
+                        <a href="{% url 'finance:income_category_delete' category.pk %}" 
+                           class="btn btn-sm btn-outline-danger" 
+                           title="{% trans 'O\'chirish' %}">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>
@@ -67,8 +75,16 @@
                 <ul class="list-group">
                     {% for category in expense_categories %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <span><i class="bi bi-tag-fill text-danger"></i> {{ category.name }}</span>
-                        <small class="text-muted">{{ category.created_at|date:"d.m.Y" }}</small>
+                        <div>
+                            <i class="bi bi-tag-fill text-danger"></i> {{ category.name }}
+                            <br><small class="text-muted">{{ category.created_at|date:"d.m.Y" }}</small>
+                        </div>
+                        <!-- YANGI: O'chirish tugmasi -->
+                        <a href="{% url 'finance:expense_category_delete' category.pk %}" 
+                           class="btn btn-sm btn-outline-danger" 
+                           title="{% trans 'O\'chirish' %}">
+                            <i class="bi bi-trash"></i>
+                        </a>
                     </li>
                     {% endfor %}
                 </ul>

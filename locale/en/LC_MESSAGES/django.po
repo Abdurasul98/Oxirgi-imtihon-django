@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-20 02:33+0500\n"
+"POT-Creation-Date: 2026-01-20 04:57+0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: .\config\settings.py:161
+#: .\config\settings.py:156
 msgid "O'zbek"
 msgstr ""
 
-#: .\config\settings.py:162
+#: .\config\settings.py:157
 msgid "English"
 msgstr ""
 
-#: .\config\settings.py:163
+#: .\config\settings.py:158
 msgid "Русский"
 msgstr ""
 
@@ -195,37 +195,117 @@ msgstr "Language"
 msgid "Chiqish"
 msgstr "Logout"
 
+#: .\finance\templates\finance\category_confirm_delete.html:4
+#: .\finance\templates\finance\confirm_delete.html:4
+msgid "O'chirishni tasdiqlash"
+msgstr "Confirm deletion"
+
+#: .\finance\templates\finance\category_confirm_delete.html:11
+#, fuzzy
+#| msgid "Kategoriya bo'yicha kirimlar"
+msgid "Kategoriyani o'chirish"
+msgstr "Income by Category"
+
+#: .\finance\templates\finance\category_confirm_delete.html:15
+#: .\finance\templates\finance\confirm_delete.html:15
+msgid "Siz"
+msgstr "You"
+
+#: .\finance\templates\finance\category_confirm_delete.html:15
+#: .\finance\templates\finance\confirm_delete.html:15
+msgid "ni o'chirmoqchisiz:"
+msgstr "are about to delete:"
+
+#: .\finance\templates\finance\category_confirm_delete.html:26
+#: .\finance\templates\finance\category_confirm_delete.html:41
+msgid "Ogohlantirish:"
+msgstr "Warning:"
+
+#: .\finance\templates\finance\category_confirm_delete.html:27
+#: .\finance\templates\finance\category_confirm_delete.html:42
+msgid "Bu kategoriyada"
+msgstr "In this category"
+
+#: .\finance\templates\finance\category_confirm_delete.html:27
+msgid "ta kirim mavjud!"
+msgstr "There are incomes!"
+
+#: .\finance\templates\finance\category_confirm_delete.html:29
+msgid ""
+"Kategoriyani o'chirib bo'lmaydi. Avval barcha kirimlarni boshqa kategoriyaga "
+"o'tkazing yoki o'chiring."
+msgstr "The category cannot be deleted. First, move all incomes to another category or delete them."
+
+#: .\finance\templates\finance\category_confirm_delete.html:34
+#: .\finance\templates\finance\category_confirm_delete.html:49
+msgid "Qaytish"
+msgstr "Back"
+
+#: .\finance\templates\finance\category_confirm_delete.html:42
+msgid "ta chiqim mavjud!"
+msgstr "There are expenses!"
+
+#: .\finance\templates\finance\category_confirm_delete.html:44
+msgid ""
+"Kategoriyani o'chirib bo'lmaydi. Avval barcha chiqimlarni boshqa "
+"kategoriyaga o'tkazing yoki o'chiring."
+msgstr "The category cannot be deleted. First, move all expenses to another category or delete them."
+
+#: .\finance\templates\finance\category_confirm_delete.html:57
+msgid ""
+"Bu kategoriyada hech qanday kirim yoki chiqim yo'q. O'chirishingiz mumkin."
+msgstr "There are no incomes or expenses in this category. You can delete it."
+
+#: .\finance\templates\finance\category_confirm_delete.html:62
+msgid "Bu amal qaytarilmaydi!"
+msgstr "This action cannot be undone!"
+
+#: .\finance\templates\finance\category_confirm_delete.html:69
+#: .\finance\templates\finance\confirm_delete.html:51
+msgid "Ha, o'chirish"
+msgstr "Yes, delete"
+
+#: .\finance\templates\finance\category_confirm_delete.html:72
+#: .\finance\templates\finance\confirm_delete.html:55
+msgid "Yo'q, bekor qilish"
+msgstr "No, cancel"
+
 #: .\finance\templates\finance\category_list.html:14
 msgid "Kirim kategoriyalari"
 msgstr "Income Categories"
 
 #: .\finance\templates\finance\category_list.html:21
-#: .\finance\templates\finance\category_list.html:58
+#: .\finance\templates\finance\category_list.html:66
 msgid "Yangi kategoriya nomi"
 msgstr "New category name"
 
 #: .\finance\templates\finance\category_list.html:23
-#: .\finance\templates\finance\category_list.html:60
+#: .\finance\templates\finance\category_list.html:68
 msgid "Qo'shish"
 msgstr "Add"
 
 #: .\finance\templates\finance\category_list.html:40
+#: .\finance\templates\finance\category_list.html:85
+msgid "O\\"
+msgstr ""
+
+#: .\finance\templates\finance\category_list.html:48
 msgid "Hech qanday kirim kategoriyasi yo'q"
 msgstr "There are no income categories"
 
-#: .\finance\templates\finance\category_list.html:51
+#: .\finance\templates\finance\category_list.html:59
 msgid "Chiqim kategoriyalari"
 msgstr "Expense Categories"
 
-#: .\finance\templates\finance\category_list.html:77
+#: .\finance\templates\finance\category_list.html:93
 msgid "Hech qanday chiqim kategoriyasi yo'q"
 msgstr "There are no expense categories"
 
-#: .\finance\templates\finance\category_list.html:88
+#: .\finance\templates\finance\category_list.html:104
 msgid "Maslahat:"
 msgstr "Tip:"
 
-#: .\finance\templates\finance\category_list.html:88
+#: .\finance\templates\finance\category_list.html:104
 msgid ""
 "Kategoriyalarni oldindan qo'shing, keyin kirim va chiqim qo'shayotganda "
 "tanlashingiz osonroq bo'ladi."
@@ -233,37 +313,25 @@ msgstr ""
 "Add categories in advance so it will be easier to select them when adding "
 "income and expenses."
 
-#: .\finance\templates\finance\category_list.html:90
+#: .\finance\templates\finance\category_list.html:106
 msgid "Misol kirim kategoriyalari:"
 msgstr "Example Income Categories:"
 
-#: .\finance\templates\finance\category_list.html:90
+#: .\finance\templates\finance\category_list.html:106
 msgid "Oylik, Avans, Kunlik ish haqi, Bonuslar"
 msgstr "Salary, Advance, Daily wage, Bonuses"
 
-#: .\finance\templates\finance\category_list.html:92
+#: .\finance\templates\finance\category_list.html:108
 msgid "Misol chiqim kategoriyalari:"
 msgstr "Example expense categories:"
 
-#: .\finance\templates\finance\category_list.html:92
+#: .\finance\templates\finance\category_list.html:108
 msgid "Yo'lkira, Tushlik, Salomatlik, Kommunal, Kiyim-kechak"
 msgstr "Transport, Lunch, Healthcare, Utilities, Clothing"
-
-#: .\finance\templates\finance\confirm_delete.html:4
-msgid "O'chirishni tasdiqlash"
-msgstr "Confirm deletion"
 
 #: .\finance\templates\finance\confirm_delete.html:11
 msgid "O'chirishni tasdiqlang"
 msgstr "Confirm deletion"
-
-#: .\finance\templates\finance\confirm_delete.html:15
-msgid "Siz"
-msgstr "You"
-
-#: .\finance\templates\finance\confirm_delete.html:15
-msgid "ni o'chirmoqchisiz:"
-msgstr "are about to delete:"
 
 #: .\finance\templates\finance\confirm_delete.html:26
 msgid "DIQQAT!"
@@ -288,14 +356,6 @@ msgstr "After deletion, the account balance will be updated automatically."
 #: .\finance\templates\finance\confirm_delete.html:47
 msgid "O'chirish imkonsiz"
 msgstr "Deletion not possible"
-
-#: .\finance\templates\finance\confirm_delete.html:51
-msgid "Ha, o'chirish"
-msgstr "Yes, delete"
-
-#: .\finance\templates\finance\confirm_delete.html:55
-msgid "Yo'q, bekor qilish"
-msgstr "No, cancel"
 
 #: .\finance\templates\finance\dashboard.html:14
 #: .\finance\templates\finance\income_list.html:16

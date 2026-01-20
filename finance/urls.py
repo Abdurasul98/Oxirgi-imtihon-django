@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (register_view,login_view,logout_view,dashboard_view,income_list_view,income_add_view,income_edit_view,income_delete_view,
                     expense_list_view,expense_add_view,expense_edit_view,expense_delete_view,account_list_view,account_add_view,
                     category_list_view,reports_view,verify_email_view,resend_verification_code,forgot_password_view,reset_password_view,
-                    account_edit_view,account_delete_view,profile_view)
+                    account_edit_view,account_delete_view,profile_view,expense_category_delete_view,income_category_delete_view)
 
 app_name = 'finance'
 
@@ -39,6 +39,9 @@ urlpatterns = [
     
     # Category URLs
     path('categories/', category_list_view, name='category_list'),
+    path('income-category/<int:pk>/delete/', income_category_delete_view, name='income_category_delete'), 
+    path('expense-category/<int:pk>/delete/', expense_category_delete_view, name='expense_category_delete'), 
+    
 
     # Reports URL - SHU QATORNI QO'SHING
     path('reports/', reports_view, name='reports'),
