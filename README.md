@@ -12,5 +12,7 @@ boshidan ochib tekshirib korin lekin tayyor userni profiliga kirib ozgartirsa ha
 abdurasul
 Qwerty123456.
 
+bu default django uchun imtihon shartida admin qilish etilmagan shu sababi bilan alohida bir admin sahifasi yoq faqat djangoni admini orqali 
+
 admin
 123
